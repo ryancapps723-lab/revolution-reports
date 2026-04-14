@@ -800,5 +800,31 @@ function showErr(msg) {
   el.textContent=msg;
 }
 </script>
+
+<style id="fix-override">
+/* ── Regulated Fleet Override ── */
+.lrow { padding: 2px 5px !important; gap: 2px !important; }
+.dbody { padding: 2px 5px !important; gap: 2px !important; }
+.driver-col { gap: 4px !important; }
+.col-heads { padding: 2px 5px !important; font-size: 6px !important; }
+.lgp { font-size: 8px !important; }
+.lday, .lcust, .lroute { font-size: 6.5px !important; }
+.lroute { line-height: 1.2 !important; }
+.kv { font-size: 14px !important; }
+.kl { font-size: 7px !important; margin-bottom: 1px !important; }
+.dhead { padding: 2px 8px !important; }
+.dmeta { font-size: 7px !important; line-height: 1.3 !important; }
+/* Remove duplicate dname if still present */
+.dhead .dname { display: none !important; }
+/* Red name bar */
+.dcard > div:first-child { padding: 3px 8px !important; font-size: 11px !important; }
+/* Gold miles banner */
+.dcard > div:nth-child(3) { padding: 2px 8px !important; }
+.dcard > div:nth-child(3) span:first-child { font-size: 10px !important; }
+.dcard > div:nth-child(3) span:last-child { font-size: 7px !important; }
+/* Col heads spans */
+.col-heads span { font-size: 6px !important; }
+</style>
+
 </body>
 </html>
