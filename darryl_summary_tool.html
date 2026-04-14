@@ -595,6 +595,14 @@ function generateSummary() {
       <div class="kpi hl2"><div class="kv">$${netOp.toLocaleString()}</div><div class="kl">Net Operating Est.</div></div>
     </div>
 
+    <div style="background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:8px 16px;display:flex;align-items:center;justify-content:center;gap:12px;flex-shrink:0">
+      <span style="font-size:13px;font-weight:700;color:#ffffff">Revenue &nbsp;<span style="color:#cc1e2b">$$${totalRevenue.toLocaleString()}</span></span>
+      <span style="font-size:16px;color:rgba(255,255,255,.3)">&#8722;</span>
+      <span style="font-size:13px;font-weight:700;color:#ffffff">Costs &nbsp;<span style="color:#f87171">$$${totalCosts.toLocaleString()}</span></span>
+      <span style="font-size:16px;color:rgba(255,255,255,.3)">=</span>
+      <span style="font-size:15px;font-weight:800;color:${netOp>=0?'#4ade80':'#f87171'}">Net &nbsp;$$${netOp.toLocaleString()} &nbsp;(${netMargin}%)</span>
+    </div>
+
     <!-- MAIN GRID -->
     <div class="main-grid" style="grid-template-columns:1.7fr 0.82fr 0.82fr">
 

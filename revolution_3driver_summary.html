@@ -682,7 +682,7 @@ function generate() {
     return `<div class="driver-col ${slot}">
       <div class="dcard ${slot}">
         <div class="dhead ${slot}">
-          <span class="dname">${d.name}</span>
+          <span class="dname" style="font-size:15px;font-weight:800;letter-spacing:.04em">${d.name}</span>
           <div class="dmeta">$${d.pay}/hr${d.unit?' · Unit '+d.unit:''} · ${cfg.truckType}<br>${fmt(res.totalMiles)}mi · ${driveHrs}dr + ${cfg.lulHrs}h L/UL = ${totalHrs}h total</div>
         </div>
         <div class="col-heads" style="grid-template-columns:${colTpl}">
@@ -728,6 +728,14 @@ function generate() {
       <div class="kpi"><div class="kv">$${fmt(combPay)}</div><div class="kl">Driver Pay</div></div>
       <div class="kpi"><div class="kv">$${fmt(combFuel)}</div><div class="kl">Fuel Est.</div></div>
       <div class="kpi hl2"><div class="kv">$${fmt(combNet)}</div><div class="kl">Net Operating</div></div>
+    </div>
+
+    <div style="background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:8px 16px;display:flex;align-items:center;justify-content:center;gap:12px;flex-shrink:0">
+      <span style="font-size:13px;font-weight:700;color:#ffffff">Revenue &nbsp;<span style="color:#cc1e2b">$\${fmt(combRev)}</span></span>
+      <span style="font-size:16px;color:rgba(255,255,255,.3)">−</span>
+      <span style="font-size:13px;font-weight:700;color:#ffffff">Costs &nbsp;<span style="color:#f87171">$\${fmt(combCosts)}</span></span>
+      <span style="font-size:16px;color:rgba(255,255,255,.3)">=</span>
+      <span style="font-size:15px;font-weight:800;color:\${combNet>=0?'#4ade80':'#f87171'}">Net &nbsp;$\${fmt(combNet)} &nbsp;(\${combMarg}%)</span>
     </div>
 
     <div class="driver-cols">${driverCols}</div>
