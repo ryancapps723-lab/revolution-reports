@@ -689,7 +689,7 @@ function generate() {
     const totalHrs = r2(res.loads.reduce((s,l)=>s+l.totalHrs,0));
     return `<div class="driver-col ${slot}">
       <div class="dcard ${slot}">
-        <div style="background:rgba(0,0,0,.3);padding:4px 10px;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#ffffff;border-bottom:1px solid rgba(255,255,255,.1)">${d.name} &nbsp;<span style="font-size:9px;font-weight:400;color:#d0d4da">${d.truck||cfg.truckType}</span></div>
+        <div style="background:rgba(0,0,0,.3);padding:6px 10px;font-size:12px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#ffffff;border-bottom:2px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07)">${d.name} &nbsp;<span style="font-size:9px;font-weight:400;color:#d0d4da">${d.truck||cfg.truckType}</span></div>
         <div class="dhead ${slot}">
           <span class="dname" style="font-size:13px;font-weight:700;letter-spacing:.04em">${d.name}</span>
           <div class="dmeta">$${d.pay}/hr${d.unit?' · Unit '+d.unit:''} · ${d.truck||cfg.truckType}<br>${fmt(res.totalMiles)}mi · ${driveHrs}dr + ${cfg.lulHrs}h L/UL = ${totalHrs}h total</div>
