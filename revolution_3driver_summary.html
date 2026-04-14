@@ -87,13 +87,14 @@ label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#d0d4da;
 .kpi.hl4 .kv{color:#2dd4bf}
 .kl{font-size:6px;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.65);margin-top:2px}
 /* Driver columns */
-.driver-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;flex:1;min-height:0;overflow:hidden}
+.driver-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;flex:1;min-height:0;overflow:hidden}
 .driver-col{display:flex;flex-direction:column;gap:7px;overflow:hidden;min-height:0}
 .dcard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;flex:1;min-height:0}
 .dhead{padding:6px 10px;display:flex;justify-content:space-between;align-items:center}
 .d1 .dhead{background:rgba(204,30,43,.85)}
 .d2 .dhead{background:rgba(180,100,0,.75)}
 .d3 .dhead{background:rgba(37,99,175,.75)}
+.d4 .dhead{background:rgba(13,148,136,.75)}
 .dname{font-weight:800;font-size:16px;letter-spacing:.05em;color:#ffffff}
 .dmeta{font-size:7.5px;color:rgba(255,255,255,.88);text-align:right;line-height:1.5}
 .col-heads{display:grid;padding:3px 7px;border-bottom:1px solid rgba(255,255,255,.08)}
@@ -233,8 +234,8 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
 <!-- ══ SETUP ══ -->
 <div id="setup">
   <div class="setup-brand">RT &nbsp;REVOLUTION TRUCKING</div>
-  <div class="setup-heading">3-Driver Summary Generator</div>
-  <div class="setup-sub">Upload one combined file or three separate files · configure each driver · generate one-page summary</div>
+  <div class="setup-heading">Regulated Fleet Summary</div>
+  <div class="setup-sub">Upload one combined file · generates summary for all 4 regulated drivers</div>
 
   <!-- Mode toggle -->
   <div class="mode-toggle">
@@ -244,7 +245,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
 
   <!-- SEPARATE MODE -->
   <div id="modeSeparate" style="width:100%;max-width:1000px;display:flex;flex-direction:column;gap:14px">
-    <div class="setup-grid">
+    <div class="setup-grid" style="grid-template-columns:repeat(4,1fr)">
       <!-- Driver 1 -->
       <div class="setup-card d1">
         <div class="setup-card-title">Driver 1</div>
@@ -310,7 +311,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
         <div class="uz-file" id="fn_comb"></div>
         <div class="uz-count" id="fc_comb"></div>
       </div>
-      <div class="setup-grid" id="combDriverRows">
+      <div class="setup-grid" style="grid-template-columns:repeat(4,1fr)" id="combDriverRows">
         <div class="setup-card d1">
           <div class="setup-card-title">Driver 1 &mdash; Constant</div>
           <div style="background:rgba(255,255,255,.05);border-radius:6px;padding:12px 14px">
@@ -330,6 +331,13 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
           <div style="background:rgba(255,255,255,.05);border-radius:6px;padding:12px 14px">
             <div style="font-family:Arial,sans-serif;font-weight:800;font-size:18px;letter-spacing:.04em">Bryan Barrington</div>
             <div style="font-size:11px;color:#d0d4da;margin-top:4px">Unit 2611267 &nbsp;&middot;&nbsp; $25.00/hr &nbsp;&middot;&nbsp; OT $37.50/hr after 40h</div>
+          </div>
+        </div>
+        <div class="setup-card d4" style="border-color:rgba(45,212,191,.3)">
+          <div class="setup-card-title" style="color:#2dd4bf">Driver 4 &mdash; Constant</div>
+          <div style="background:rgba(45,212,191,.06);border-radius:6px;padding:12px 14px">
+            <div style="font-family:Arial,sans-serif;font-weight:800;font-size:18px;letter-spacing:.04em">Darryl Kidd</div>
+            <div style="font-size:11px;color:#d0d4da;margin-top:4px">Unit 3000 &nbsp;&middot;&nbsp; $20.00/hr &nbsp;&middot;&nbsp; OT $30.00/hr after 40h &nbsp;&middot;&nbsp; 26ft Straight Truck</div>
           </div>
         </div>
       </div>
@@ -610,9 +618,10 @@ function generate() {
     if (!combRows) { showErr('Please upload a combined file.'); return; }
     // Hardcoded tractor drivers — name must match Drivers column in TMS export
     const TRACTOR_DRIVERS = [
-      { name: 'Michael Arsena',  pay: 26.50, unit: '2611265' },
-      { name: 'Brett Woods',     pay: 28.00, unit: '2611266' },
-      { name: 'Bryan Barrington',pay: 25.00, unit: '2611267' },
+      { name: 'Michael Arsena',  pay: 26.50, unit: '2611265', truck: 'Semi / 53ft' },
+      { name: 'Brett Woods',     pay: 28.00, unit: '2611266', truck: 'Semi / 53ft' },
+      { name: 'Bryan Barrington',pay: 25.00, unit: '2611267', truck: 'Semi / 53ft' },
+      { name: 'Darryl Kidd',     pay: 20.00, unit: '3000',    truck: '26ft Straight' },
     ];
     for (const d of TRACTOR_DRIVERS) {
       const loads = parseLoads(combRows, d.name);
@@ -621,9 +630,8 @@ function generate() {
   }
 
   if (drivers.length < 1) { showErr('Please configure at least one driver.'); return; }
-  if (drivers.length < 3) {
-    // Pad to 3
-    while (drivers.length < 3) drivers.push({name:'—', pay:0, unit:'', loads:[]});
+  if (drivers.length < 4) {
+    while (drivers.length < 4) drivers.push({name:'—', pay:0, unit:'', truck:'', loads:[]});
   }
 
   showErr('');
@@ -671,7 +679,7 @@ function generate() {
   }).join('');
 
   const colTpl = '40px 100px 1fr 38px 38px 34px 40px 40px 40px';
-  const slots = ['d1','d2','d3'];
+  const slots = ['d1','d2','d3','d4'];
 
   const driverCols = results.map((d,i) => {
     const slot = slots[i];
@@ -683,7 +691,7 @@ function generate() {
       <div class="dcard ${slot}">
         <div class="dhead ${slot}">
           <span class="dname" style="font-size:15px;font-weight:800;letter-spacing:.04em">${d.name}</span>
-          <div class="dmeta">$${d.pay}/hr${d.unit?' · Unit '+d.unit:''} · ${cfg.truckType}<br>${fmt(res.totalMiles)}mi · ${driveHrs}dr + ${cfg.lulHrs}h L/UL = ${totalHrs}h total</div>
+          <div class="dmeta">$${d.pay}/hr${d.unit?' · Unit '+d.unit:''} · ${d.truck||cfg.truckType}<br>${fmt(res.totalMiles)}mi · ${driveHrs}dr + ${cfg.lulHrs}h L/UL = ${totalHrs}h total</div>
         </div>
         <div class="col-heads" style="grid-template-columns:${colTpl}">
           <span>Date</span><span>Customer</span><span>Route</span>
@@ -709,7 +717,7 @@ function generate() {
       <div class="hdr-left">
         <div class="hdr-brand">RT</div>
         <div class="hdr-title">
-          <h1>Weekly Operations Summary — ${cfg.period}</h1>
+          <h1>Regulated Fleet — Operations Summary — ${cfg.period}</h1>
           <p>${cfg.truckType} &nbsp;·&nbsp; Manager Review &nbsp;·&nbsp; Confidential — Internal Use Only &nbsp;·&nbsp; OT: ${otStart}–${otEnd} after ${cfg.otThresh}h/week${cfg.prepBy?' · '+cfg.prepBy:''}</p>
         </div>
       </div>
