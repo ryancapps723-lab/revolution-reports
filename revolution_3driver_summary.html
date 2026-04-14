@@ -728,7 +728,7 @@ function generate() {
     </div>
 
     <div class="kpibar" style="grid-template-columns:repeat(8,1fr)">
-      <div class="kpi hl"><div class="kv">$${fmt(combRev)}</div><div class="kl">Gross Revenue</div></div>
+      <div class="kpi hl"><div class="kv">${fmt(combRev)}</div><div class="kl">Gross Revenue</div></div>
       <div class="kpi"><div class="kv">$${fmt(combGP)}</div><div class="kl">Gross Profit</div></div>
       <div class="kpi"><div class="kv">${fmt(combMiles)}</div><div class="kl">Total Miles</div></div>
       <div class="kpi"><div class="kv">${combLoads}</div><div class="kl">Total Loads</div></div>
@@ -739,23 +739,23 @@ function generate() {
     </div>
 
     <div style="background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:8px 16px;display:flex;align-items:center;justify-content:center;gap:12px;flex-shrink:0">
-      <span style="font-size:13px;font-weight:700;color:#ffffff">Revenue &nbsp;<span style="color:#cc1e2b">$\${fmt(combRev)}</span></span>
-      <span style="font-size:16px;color:rgba(255,255,255,.3)">−</span>
-      <span style="font-size:13px;font-weight:700;color:#ffffff">Costs &nbsp;<span style="color:#f87171">$\${fmt(combCosts)}</span></span>
+      <span style="font-size:13px;font-weight:700;color:#ffffff">Revenue &nbsp;<span style="color:#cc1e2b">${fmt(combRev)}</span></span>
+      <span style="font-size:16px;color:rgba(255,255,255,.3)">&#8722;</span>
+      <span style="font-size:13px;font-weight:700;color:#ffffff">Costs &nbsp;<span style="color:#f87171">${fmt(combCosts)}</span></span>
       <span style="font-size:16px;color:rgba(255,255,255,.3)">=</span>
-      <span style="font-size:15px;font-weight:800;color:\${combNet>=0?'#4ade80':'#f87171'}">Net &nbsp;$\${fmt(combNet)} &nbsp;(\${combMarg}%)</span>
+      <span style="font-size:15px;font-weight:800;color:${combNet>=0?'#4ade80':'#f87171'}">Net &nbsp;$${fmt(combNet)} &nbsp;(${combMarg}%)</span>
     </div>
 
     <div class="driver-cols">${driverCols}</div>
 
     <div class="totals-bar" style="grid-template-columns:auto repeat(7,1fr)">
       <div style="font-family:Arial,sans-serif;font-weight:800;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#cc1e2b;display:flex;align-items:center">■ COMBINED TOTALS</div>
-      <div class="tot-kpi hl"><div class="tot-kv">$${fmt(combRev)}</div><div class="tot-kl">Revenue</div></div>
+      <div class="tot-kpi hl"><div class="tot-kv">${fmt(combRev)}</div><div class="tot-kl">Revenue</div></div>
       <div class="tot-kpi"><div class="tot-kv">${fmt(combMiles)}</div><div class="tot-kl">Miles</div></div>
       <div class="tot-kpi"><div class="tot-kv">$${combRPM}</div><div class="tot-kl">Avg RPM</div></div>
       <div class="tot-kpi"><div class="tot-kv">$${fmt(combPay)}</div><div class="tot-kl">Driver Pay</div></div>
       <div class="tot-kpi"><div class="tot-kv">$${fmt(combFuel)}</div><div class="tot-kl">Fuel</div></div>
-      <div class="tot-kpi"><div class="tot-kv">$${fmt(combCosts)}</div><div class="tot-kl">Total Costs</div></div>
+      <div class="tot-kpi"><div class="tot-kv">${fmt(combCosts)}</div><div class="tot-kl">Total Costs</div></div>
       <div class="tot-kpi hl2"><div class="tot-kv">$${fmt(combNet)} (${combMarg}%)</div><div class="tot-kl">Net Operating</div></div>
     <div class="panel" style="flex-shrink:0;margin-top:6px">
       <div class="phead">
