@@ -94,7 +94,7 @@ label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:#d0d4da;
 .d1 .dhead{background:rgba(204,30,43,.85)}
 .d2 .dhead{background:rgba(180,100,0,.75)}
 .d3 .dhead{background:rgba(37,99,175,.75)}
-.dname{font-weight:800;font-size:13px;letter-spacing:.04em;color:#ffffff}
+.dname{font-weight:800;font-size:12px;letter-spacing:.03em;color:#ffffff}
 .dmeta{font-size:7.5px;color:rgba(255,255,255,.88);text-align:right;line-height:1.5}
 .col-heads{display:grid;padding:3px 7px;border-bottom:1px solid rgba(255,255,255,.08)}
 .col-heads span{font-size:6px;text-transform:uppercase;letter-spacing:.06em;color:#d0d4da;font-weight:700}
@@ -467,16 +467,16 @@ function generate() {
       </div>
       <div class="dstats">
         <div class="stat-row" style="grid-template-columns:1fr 1fr 1fr 1fr">
-          <span class="lbl">Load Mi</span><span class="val">${fmt(d.loadedMi)}</span>
-          <span class="lbl">DH Mi</span><span class="val">${fmt(d.dhMi)}</span>
+          <span class="lbl">Load Mi</span> <span class="val">${fmt(d.loadedMi)}</span>
+          <span class="lbl">DH Mi</span> <span class="val">${fmt(d.dhMi)}</span>
         </div>
         <div class="stat-row" style="grid-template-columns:1fr 1fr 1fr 1fr">
-          <span class="lbl">Expenses</span><span class="val red">$${fmt(d.expenses)}</span>
-          <span class="lbl">RPM</span><span class="val gld">$${d.rpm}</span>
+          <span class="lbl">Expenses</span> <span class="val red">$${fmt(d.expenses)}</span>
+          <span class="lbl">RPM</span> <span class="val gld">$${d.rpm}</span>
         </div>
         <div class="stat-row" style="grid-template-columns:1fr 1fr 1fr 1fr">
-          <span class="lbl">GP</span><span class="val" style="color:${gpColor}">$${fmt(d.gp)}</span>
-          <span class="lbl">GP %</span><span class="val" style="color:${gpColor}">${d.gpPct}%</span>
+          <span class="lbl">GP</span> <span class="val" style="color:${gpColor}">$${fmt(d.gp)}</span>
+          <span class="lbl">GP%</span> <span class="val" style="color:${gpColor}">${d.gpPct}%</span>
         </div>
       </div>
       <div class="gp-bar-wrap">
