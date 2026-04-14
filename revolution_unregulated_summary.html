@@ -467,35 +467,36 @@ function generate() {
       </div>
       <div class="dstats">
         <div class="stat-row" style="grid-template-columns:1fr 1fr 1fr 1fr">
-          <span class="lbl">Loaded Mi</span><span class="val">${fmt(d.loadedMi)}</span>
+          <span class="lbl">Load Mi</span><span class="val">${fmt(d.loadedMi)}</span>
           <span class="lbl">DH Mi</span><span class="val">${fmt(d.dhMi)}</span>
         </div>
         <div class="stat-row" style="grid-template-columns:1fr 1fr 1fr 1fr">
           <span class="lbl">Expenses</span><span class="val red">$${fmt(d.expenses)}</span>
-          <span class="lbl">Avg RPM</span><span class="val gld">$${d.rpm}</span>
+          <span class="lbl">RPM</span><span class="val gld">$${d.rpm}</span>
         </div>
         <div class="stat-row" style="grid-template-columns:1fr 1fr 1fr 1fr">
-          <span class="lbl">GP $</span><span class="val" style="color:${gpColor}">$${fmt(d.gp)}</span>
+          <span class="lbl">GP</span><span class="val" style="color:${gpColor}">$${fmt(d.gp)}</span>
           <span class="lbl">GP %</span><span class="val" style="color:${gpColor}">${d.gpPct}%</span>
         </div>
       </div>
       <div class="gp-bar-wrap">
         <div class="gp-bar-bg"><div class="gp-bar-fill" style="width:${gpBarW}%"></div></div>
-        <div class="gp-bar-lbl"><span>0%</span><span>50%</span></div>
       </div>
-      <div class="custs">${custHtml || '<span style="font-size:6.5px;color:#6b7280">No loads this period</span>'}</div>
       ${negWarn}
     </div>`;
   }).join('');
 
   // ── RENDER TOP CUSTOMERS ──
-  const custRowsHtml = topFleetCusts.map(([cn,cv]) => {
+  const custRowsHtml = topFleetCusts.map(([cn,cv],i) => {
     const gpPct = cv.revenue>0 ? r2(cv.gp/cv.revenue*100) : 0;
-    return `<div class="cust-row">
-      <span class="cn" title="${cn}">${cn}</span>
-      <span class="cv">$${fmt(r2(cv.revenue))}</span>
-      <span class="cp">${gpPct}%</span>
-    </div>`;
+    const gpColor = gpPct>=30?'#4ade80':gpPct>=20?'#e8a020':'#f87171';
+    return `<tr style="border-bottom:0.5px solid rgba(255,255,255,.06)">
+      <td style="padding:4px 8px;font-size:8px;font-weight:600;color:#ffffff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px" title="${cn}">${cn}</td>
+      <td style="padding:4px 8px;font-size:8px;text-align:center;color:#d0d4da">${cv.loads}</td>
+      <td style="padding:4px 8px;font-size:8px;text-align:right;color:#ffffff;font-weight:600">$${fmt(r2(cv.revenue))}</td>
+      <td style="padding:4px 8px;font-size:8px;text-align:right;color:${gpColor};font-weight:600">$${fmt(r2(cv.gp))}</td>
+      <td style="padding:4px 8px;font-size:8px;text-align:right;color:${gpColor};font-weight:600">${gpPct}%</td>
+    </tr>`;
   }).join('');
 
   // ── RENDER MEETING CALLOUTS ──
@@ -539,28 +540,21 @@ function generate() {
       <div class="kpi"><div class="kv">${fleetLoads}</div><div class="kl">Total Loads</div></div>
     </div>
 
-    <div class="body-grid">
-      <div class="drivers-grid" style="grid-template-columns:repeat(${cols},1fr)">
-        ${driverCardsHtml}
+    <div style="display:flex;flex-direction:column;gap:.08in;flex:1;min-height:0">
+      <div style="display:grid;grid-template-columns:1fr 200px;gap:8px;flex:1;min-height:0">
+        <div class="drivers-grid" style="grid-template-columns:repeat(4,1fr)">
+          ${driverCardsHtml}
+        </div>
+        <div>
+          <div class="panel" style="height:100%">
+            <div class="phead"><h3>&#9632; Meeting Callouts</h3></div>
+            <div class="pbody">${callouts}
+              <div class="fnote">${period}${prepBy?' · '+prepBy:''} · Revolution Trucking Ops</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="right-panels">
-        <div class="panel">
-          <div class="phead"><h3>&#9632; Meeting Callouts</h3></div>
-          <div class="pbody">${callouts}
-            <div class="fnote">${period}${prepBy?' · '+prepBy:''} · Revolution Trucking Ops</div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="phead"><h3>&#9632; Top Customers</h3></div>
-          <div class="pbody">
-            <div class="csect">By Revenue &nbsp;&middot;&nbsp; GP%</div>
-            ${custRowsHtml}
-            <hr class="div">
-            <div class="cl"><span class="lb">Unique Customers</span><span class="vl">${Object.keys(fleetCustMap).length}</span></div>
-            <div class="cl"><span class="lb">Total Shipments</span><span class="vl">${fleetLoads}</span></div>
-            <div class="cl"><span class="lb">Avg per Customer</span><span class="vl">${r2(fleetLoads/Math.max(1,Object.keys(fleetCustMap).length))} loads</span></div>
-          </div>
-        </div>
+
         <div class="panel">
           <div class="phead"><h3>&#9632; Fleet Summary</h3></div>
           <div class="pbody">
@@ -572,6 +566,22 @@ function generate() {
             <div class="bigblock gold"><div class="bv">${fleetGPPct}%</div><div class="bl">Fleet GP %</div></div>
             <div class="bigblock teal"><div class="bv">$${fleetRPM}/mi</div><div class="bl">Avg RPM</div></div>
           </div>
+        </div>
+      <div class="panel" style="flex-shrink:0">
+        <div class="phead" style="display:flex;align-items:center;justify-content:space-between">
+          <h3>&#9632; Top Customers &nbsp;<span style="font-size:8px;font-weight:400;color:#d0d4da">${Object.keys(fleetCustMap).length} unique · ${fleetLoads} total shipments</span></h3>
+        </div>
+        <div style="padding:0">
+          <table style="width:100%;border-collapse:collapse">
+            <thead><tr style="background:rgba(255,255,255,.04)">
+              <th style="padding:5px 8px;font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:#d0d4da;font-weight:700;text-align:left">Customer</th>
+              <th style="padding:5px 8px;font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:#d0d4da;font-weight:700;text-align:center">Shipments</th>
+              <th style="padding:5px 8px;font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:#d0d4da;font-weight:700;text-align:right">Revenue</th>
+              <th style="padding:5px 8px;font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:#d0d4da;font-weight:700;text-align:right">Gross Profit</th>
+              <th style="padding:5px 8px;font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:#d0d4da;font-weight:700;text-align:right">GP %</th>
+            </tr></thead>
+            <tbody>${custRowsHtml}</tbody>
+          </table>
         </div>
       </div>
     </div>`;
