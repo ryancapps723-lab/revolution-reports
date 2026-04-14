@@ -646,6 +646,30 @@ function generate() {
   const combPay   = r2(results.reduce((s,d)=>s+d.res.totalPay,0));
   const combLoads = results.reduce((s,d)=>s+d.res.loads.length,0);
 
+  // Build fleet-wide customer map from all loads
+  const tractorCustMap = {};
+  results.forEach(dr => {
+    dr.res.loads.forEach(l => {
+      if (!l.customer) return;
+      if (!tractorCustMap[l.customer]) tractorCustMap[l.customer] = {loads:0, revenue:0, gp:0};
+      tractorCustMap[l.customer].loads++;
+      tractorCustMap[l.customer].revenue += l.revenue;
+      tractorCustMap[l.customer].gp += l.gp || 0;
+    });
+  });
+  const topTractorCusts = Object.entries(tractorCustMap)
+    .sort((a,b) => b[1].revenue - a[1].revenue).slice(0, 12);
+  const tractorCustRows = topTractorCusts.map(([cn, cv]) => {
+    const gpPct = cv.revenue > 0 ? Math.round(cv.gp/cv.revenue*1000)/10 : 0;
+    const gpColor = gpPct>=30?'#4ade80':gpPct>=20?'#e8a020':'#f87171';
+    return '<tr style="border-bottom:0.5px solid rgba(255,255,255,.06)">'
+      + '<td style="padding:4px 8px;font-size:8px;font-weight:600;color:#ffffff;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+cn+'">'+cn+'</td>'
+      + '<td style="padding:4px 8px;font-size:8px;text-align:center;color:#d0d4da">'+cv.loads+'</td>'
+      + '<td style="padding:4px 8px;font-size:8px;text-align:right;color:#ffffff;font-weight:600">$'+fmt(Math.round(cv.revenue*100)/100)+'</td>'
+      + '<td style="padding:4px 8px;font-size:8px;text-align:right;color:'+gpColor+';font-weight:600">'+gpPct+'%</td>'
+      + '</tr>';
+  }).join('');
+
   const colTpl = '40px 100px 1fr 38px 38px 34px 40px 40px 40px';
   const slots = ['d1','d2','d3'];
 
@@ -717,6 +741,20 @@ function generate() {
       <div class="tot-kpi"><div class="tot-kv">$${fmt(combFuel)}</div><div class="tot-kl">Fuel</div></div>
       <div class="tot-kpi"><div class="tot-kv">$${fmt(combCosts)}</div><div class="tot-kl">Total Costs</div></div>
       <div class="tot-kpi hl2"><div class="tot-kv">$${fmt(combNet)} (${combMarg}%)</div><div class="tot-kl">Net Operating</div></div>
+    <div class="panel" style="flex-shrink:0;margin-top:6px">
+      <div class="phead">
+        <h3>&#9632; Top Customers &nbsp;<span style="font-size:8px;font-weight:400;color:#d0d4da">${Object.keys(tractorCustMap).length} unique · ${combLoads} total shipments</span></h3>
+      </div>
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr style="background:rgba(255,255,255,.04)">
+          <th style="padding:5px 8px;font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:#d0d4da;font-weight:700;text-align:left">Customer</th>
+          <th style="padding:5px 8px;font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:#d0d4da;font-weight:700;text-align:center">Shipments</th>
+          <th style="padding:5px 8px;font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:#d0d4da;font-weight:700;text-align:right">Revenue</th>
+          <th style="padding:5px 8px;font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:#d0d4da;font-weight:700;text-align:right">GP %</th>
+        </tr></thead>
+        <tbody>${tractorCustRows}</tbody>
+      </table>
+    </div>
     </div>`;
 
   document.getElementById('tbarInfo').textContent = `${results.map(d=>d.name).filter(n=>n!=='—').join(' · ')} · ${cfg.period} · $${fmt(combRev)} combined`;

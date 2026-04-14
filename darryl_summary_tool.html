@@ -458,6 +458,29 @@ function generateSummary() {
   const totalMiles = loads.reduce((s,l) => s + l.miles, 0);
   const totalRevenue = round2(loads.reduce((s,l) => s + l.revenue, 0));
   const totalGP = round2(loads.reduce((s,l) => s + l.gp, 0));
+
+  // Customer aggregation
+  const darrylCustMap = {};
+  loads.forEach(l => {
+    if (!l.customer) return;
+    if (!darrylCustMap[l.customer]) darrylCustMap[l.customer] = {loads:0, revenue:0, gp:0};
+    darrylCustMap[l.customer].loads++;
+    darrylCustMap[l.customer].revenue += l.revenue;
+    darrylCustMap[l.customer].gp += l.gp || 0;
+  });
+  const topDarrylCusts = Object.entries(darrylCustMap)
+    .sort((a,b) => b[1].revenue - a[1].revenue).slice(0,12);
+  const darrylCustRows = topDarrylCusts.map(([cn,cv]) => {
+    const gpPct = cv.revenue>0 ? Math.round(cv.gp/cv.revenue*1000)/10 : 0;
+    const gpColor = gpPct>=30?'#4ade80':gpPct>=20?'#e8a020':'#f87171';
+    return '<tr style="border-bottom:0.5px solid rgba(255,255,255,.06)">'
+      + '<td style="padding:4px 8px;font-size:8px;font-weight:600;color:#ffffff;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="'+cn+'">'+cn+'</td>'
+      + '<td style="padding:4px 8px;font-size:8px;text-align:center;color:#d0d4da">'+cv.loads+'</td>'
+      + '<td style="padding:4px 8px;font-size:8px;text-align:right;color:#ffffff;font-weight:600">$'+totalRevenue.toLocaleString()+'</td>'
+      + '<td style="padding:4px 8px;font-size:8px;text-align:right;color:#ffffff;font-weight:600">$'+Math.round(cv.revenue*100)/100+'</td>'
+      + '<td style="padding:4px 8px;font-size:8px;text-align:right;color:'+gpColor+';font-weight:600">'+gpPct+'%</td>'
+      + '</tr>';
+  }).join('');
   const totalFuel = round2(totalMiles / cfg.mpg * cfg.fuelPrice);
   const totalCosts = round2(totalDriverPay + totalFuel);
   const netOp = round2(totalRevenue - totalCosts);
@@ -620,8 +643,23 @@ function generateSummary() {
         <div class="pbody">
           <div class="csect">Active Customers — ${cfg.period}</div>
           <div class="bd-grid">${bdHtml}</div>
-          <div class="fnote">${cfg.truckType}${cfg.truckUnit?' · Unit '+cfg.truckUnit:''} · Operations Dept. · ${cfg.period}${cfg.prepBy?' · Prepared by '+cfg.prepBy:''}</div>
+          <div class="fnote">${cfg.truckType}\${cfg.truckUnit?' · Unit '+cfg.truckUnit:''} · Operations Dept. · ${cfg.period}\${cfg.prepBy?' · Prepared by '+cfg.prepBy:''}</div>
         </div>
+      </div>
+
+      <div class="panel" style="flex-shrink:0;margin-top:0">
+        <div class="phead">
+          <h3>&#9632; Top Customers &nbsp;<span style="font-size:8px;font-weight:400;color:#d0d4da">${Object.keys(darrylCustMap).length} unique · ${loads.length} total shipments</span></h3>
+        </div>
+        <table style="width:100%;border-collapse:collapse">
+          <thead><tr style="background:rgba(255,255,255,.04)">
+            <th style="padding:5px 8px;font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:#d0d4da;font-weight:700;text-align:left">Customer</th>
+            <th style="padding:5px 8px;font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:#d0d4da;font-weight:700;text-align:center">Shipments</th>
+            <th style="padding:5px 8px;font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:#d0d4da;font-weight:700;text-align:right">Revenue</th>
+            <th style="padding:5px 8px;font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:#d0d4da;font-weight:700;text-align:right">GP %</th>
+          </tr></thead>
+          <tbody>${darrylCustRows}</tbody>
+        </table>
       </div>
 
     </div>`;
