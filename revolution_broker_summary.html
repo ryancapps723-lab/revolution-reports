@@ -17,15 +17,15 @@ body{font-family:'Barlow',sans-serif;background:var(--navy2);color:var(--white);
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(204,30,43,.08) 0%,transparent 65%);pointer-events:none}
 
 /* ── Nav ── */
-.nav-btn{position:fixed;top:18px;left:18px;z-index:1000;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:background .2s}
+.nav-btn{position:fixed;top:18px;left:18px;z-index:9000;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:background .2s}
 .nav-btn:hover{background:rgba(255,255,255,.13)}
 .nav-btn span{display:block;width:18px;height:2px;background:var(--white);border-radius:2px;transition:all .25s cubic-bezier(.4,0,.2,1)}
 .nav-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .nav-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
 .nav-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:998;opacity:0;pointer-events:none;transition:opacity .3s}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:8998;opacity:0;pointer-events:none;transition:opacity .3s}
 .overlay.open{opacity:1;pointer-events:all}
-.sidebar{position:fixed;top:0;left:0;width:270px;height:100%;background:#070f1a;border-right:1px solid var(--border);z-index:999;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding-bottom:24px;overflow-y:auto}
+.sidebar{position:fixed;top:0;left:0;width:270px;height:100%;background:#070f1a;border-right:1px solid var(--border);z-index:8999;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding-bottom:24px;overflow-y:auto}
 .sidebar.open{transform:translateX(0)}
 .sb-head{padding:20px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;margin-bottom:6px}
 .sb-head img{width:38px;height:38px;border-radius:8px;flex-shrink:0}
@@ -124,6 +124,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 </style>
 </head>
 <body>
+<button id="setupNavBtn" style="position:fixed;top:18px;left:18px;z-index:9000;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;"><span style="display:block;width:18px;height:2px;background:#fff;border-radius:2px"></span><span style="display:block;width:18px;height:2px;background:#fff;border-radius:2px"></span><span style="display:block;width:18px;height:2px;background:#fff;border-radius:2px"></span></button>
 
 <!-- Nav button -->
 <button class="nav-btn" id="navBtn" onclick="toggleNav()">
@@ -150,7 +151,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="sb-section">
     <div class="sb-label">🔁 Transport</div>
     <a class="sb-link active" href="revolution_broker_summary.html"><span class="ic">📦</span>Broker Summary</a>
-    <a class="sb-link" href="revolution_broker_wow.html"><span class="ic">📈</span>Week over Week</a>
+    <a class="sb-link" href="#"><span class="ic">📈</span>Week over Week<span class="soon">Soon</span></a>
   </div>
 </div>
 

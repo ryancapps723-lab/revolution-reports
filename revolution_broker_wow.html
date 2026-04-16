@@ -44,7 +44,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 
 /* Summary */
 #summary{display:none;padding:60px 24px 40px;max-width:1200px;margin:0 auto}
-.toolbar{position:fixed;top:0;left:0;right:0;background:rgba(8,18,32,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:10px 70px;display:flex;align-items:center;justify-content:space-between;z-index:100}
+.toolbar{position:fixed;top:0;left:0;right:0;background:rgba(8,18,32,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:10px 20px 10px 70px;display:flex;align-items:center;justify-content:space-between;z-index:200}
 .toolbar-info{font-size:11px;color:var(--muted);letter-spacing:.04em}
 .btn-back{background:rgba(255,255,255,.08);border:1px solid var(--border);color:var(--gray);padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Barlow',sans-serif;transition:background .15s}
 .btn-back:hover{background:rgba(255,255,255,.14)}
@@ -107,7 +107,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 
 @media print{.toolbar,.nav-btn,.nav-overlay,.nav-sidebar{display:none}body{-webkit-print-color-adjust:exact;print-color-adjust:exact}#summary{padding:20px}}
 
-.nav-btn{position:fixed;top:18px;left:18px;z-index:1000;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:background .2s}
+.nav-btn{position:fixed;top:10px;left:18px;z-index:10000;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:background .2s}
 .nav-btn:hover{background:rgba(255,255,255,.13)}
 .nav-btn span{display:block;width:18px;height:2px;background:#fff;border-radius:2px;transition:all .25s cubic-bezier(.4,0,.2,1)}
 .nav-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
@@ -143,15 +143,15 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .wk-metric-change{font-size:9px;min-height:14px}
 
 
-.nav-sb-btn{position:fixed;top:18px;left:18px;z-index:1000;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:background .2s}
+.nav-sb-btn{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:36px;height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:background .2s;flex-shrink:0}
 .nav-sb-btn:hover{background:rgba(255,255,255,.13)}
 .nav-sb-btn span{display:block;width:18px;height:2px;background:#fff;border-radius:2px;transition:all .25s cubic-bezier(.4,0,.2,1)}
 .nav-sb-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .nav-sb-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
 .nav-sb-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.nav-sb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:998;opacity:0;pointer-events:none;transition:opacity .3s}
+.nav-sb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:8998;opacity:0;pointer-events:none;transition:opacity .3s}
 .nav-sb-overlay.open{opacity:1;pointer-events:all}
-.nav-sb-sidebar{position:fixed;top:0;left:0;width:270px;height:100%;background:#070f1a;border-right:1px solid rgba(255,255,255,.1);z-index:999;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding-bottom:24px;overflow-y:auto}
+.nav-sb-sidebar{position:fixed;top:0;left:0;width:270px;height:100%;background:#070f1a;border-right:1px solid rgba(255,255,255,.1);z-index:8999;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding-bottom:24px;overflow-y:auto}
 .nav-sb-sidebar.open{transform:translateX(0)}
 .nav-sb-head{padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:12px;margin-bottom:6px}
 .nav-sb-head img{width:38px;height:38px;border-radius:8px;flex-shrink:0}
@@ -168,7 +168,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 </style>
 </head>
 <body>
-<button class="nav-sb-btn" id="navBtn"><span></span><span></span><span></span></button>
+<button id="setupNavBtn" style="position:fixed;top:18px;left:18px;z-index:9000;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;"><span style="display:block;width:18px;height:2px;background:#fff;border-radius:2px"></span><span style="display:block;width:18px;height:2px;background:#fff;border-radius:2px"></span><span style="display:block;width:18px;height:2px;background:#fff;border-radius:2px"></span></button>
 <div class="nav-sb-overlay" id="navOverlay"></div>
 <div class="nav-sb-sidebar" id="navSidebar">
   <div class="nav-sb-head">
@@ -240,7 +240,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 <button class="btn-generate" id="genBtn">Generate Report</button>
 </div></div>
 <div id="summary">
-<div class="toolbar"><button class="btn-back" id="backBtn">← New Report</button><div class="toolbar-info" id="tbarInfo"></div><button class="btn-print" onclick="window.print()">🖨 Print / Save PDF</button></div>
+<div class="toolbar"><button class="nav-sb-btn" id="navBtn"><span></span><span></span><span></span></button><button class="btn-back" id="backBtn">← New Report</button><div class="toolbar-info" id="tbarInfo"></div><button class="btn-print" onclick="window.print()">🖨 Print / Save PDF</button></div>
 <div id="pageOut"></div>
 </div>
 <script>
@@ -453,12 +453,16 @@ function showErr(msg){
 
 <script id="navScript">
 (function(){
-  var btn=document.getElementById('navBtn');
+  function getBtn(){return document.getElementById('navBtn')||document.getElementById('setupNavBtn');}
   var overlay=document.getElementById('navOverlay');
   var sidebar=document.getElementById('navSidebar');
-  function o(){btn.classList.add('open');sidebar.classList.add('open');overlay.classList.add('open');}
-  function c(){btn.classList.remove('open');sidebar.classList.remove('open');overlay.classList.remove('open');}
-  btn.addEventListener('click',function(){sidebar.classList.contains('open')?c():o();});
+  function o(){sidebar.classList.add('open');overlay.classList.add('open');}
+  function c(){sidebar.classList.remove('open');overlay.classList.remove('open');}
+  function toggle(){sidebar.classList.contains('open')?c():o();}
+  var tb=document.getElementById('navBtn');
+  var sb=document.getElementById('setupNavBtn');
+  if(tb)tb.addEventListener('click',toggle);
+  if(sb)sb.addEventListener('click',toggle);
   overlay.addEventListener('click',c);
   document.addEventListener('keydown',function(e){if(e.key==='Escape')c();});
 })();

@@ -206,15 +206,15 @@ hr.div{border:none;border-top:1px solid rgba(255,255,255,.09);margin:1px 0}
 .wsum-val{font-size:7.5px;font-weight:600;color:#ffffff}
 
 
-.nav-btn{position:fixed;top:18px;left:18px;z-index:1000;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:background .2s}
+.nav-btn{position:fixed;top:18px;left:18px;z-index:9000;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:background .2s}
 .nav-btn:hover{background:rgba(255,255,255,.13)}
 .nav-btn span{display:block;width:18px;height:2px;background:#ffffff;border-radius:2px;transition:all .25s cubic-bezier(.4,0,.2,1)}
 .nav-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .nav-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
 .nav-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:998;opacity:0;pointer-events:none;transition:opacity .3s}
+.nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:8998;opacity:0;pointer-events:none;transition:opacity .3s}
 .nav-overlay.open{opacity:1;pointer-events:all}
-.nav-sidebar{position:fixed;top:0;left:0;width:270px;height:100%;background:#070f1a;border-right:1px solid rgba(255,255,255,.1);z-index:999;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding-bottom:24px;overflow-y:auto}
+.nav-sidebar{position:fixed;top:0;left:0;width:270px;height:100%;background:#070f1a;border-right:1px solid rgba(255,255,255,.1);z-index:8999;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding-bottom:24px;overflow-y:auto}
 .nav-sidebar.open{transform:translateX(0)}
 .nav-sb-head{padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:12px;margin-bottom:6px}
 .nav-sb-head img{width:38px;height:38px;border-radius:8px;flex-shrink:0}
@@ -261,6 +261,7 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
 </script>
 </head>
 <body>
+<button id="setupNavBtn" style="position:fixed;top:18px;left:18px;z-index:9000;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;"><span style="display:block;width:18px;height:2px;background:#fff;border-radius:2px"></span><span style="display:block;width:18px;height:2px;background:#fff;border-radius:2px"></span><span style="display:block;width:18px;height:2px;background:#fff;border-radius:2px"></span></button>
 
 <button class="nav-btn" id="navBtn"><span></span><span></span><span></span></button>
 <div class="nav-overlay" id="navOverlay"></div>
