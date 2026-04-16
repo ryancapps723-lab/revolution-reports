@@ -205,28 +205,31 @@ hr.div{border:none;border-top:1px solid rgba(255,255,255,.09);margin:1px 0}
   @page{size:11in 8.5in landscape;margin:0}
 }
 
-.nav-btn{position:fixed;top:18px;left:18px;z-index:9000;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:background .2s}
-.nav-btn:hover{background:rgba(255,255,255,.13)}
-.nav-btn span{display:block;width:18px;height:2px;background:#ffffff;border-radius:2px;transition:all .25s cubic-bezier(.4,0,.2,1)}
-.nav-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.nav-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
-.nav-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:8998;opacity:0;pointer-events:none;transition:opacity .3s}
-.nav-overlay.open{opacity:1;pointer-events:all}
-.nav-sidebar{position:fixed;top:0;left:0;width:270px;height:100%;background:#070f1a;border-right:1px solid rgba(255,255,255,.1);z-index:8999;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding-bottom:24px;overflow-y:auto}
-.nav-sidebar.open{transform:translateX(0)}
+
+
+#navToggle{display:none}
+.nav-label{position:fixed;top:14px;left:14px;z-index:99999;background:rgba(13,27,46,.95);border:1px solid rgba(255,255,255,.2);border-radius:7px;width:38px;height:38px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer}
+.nav-label span{display:block;width:18px;height:2px;background:#fff;border-radius:2px;transition:all .25s}
+#navToggle:checked ~ .nav-label span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+#navToggle:checked ~ .nav-label span:nth-child(2){opacity:0}
+#navToggle:checked ~ .nav-label span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;opacity:0;pointer-events:none;transition:opacity .3s}
+#navToggle:checked ~ .nav-overlay{opacity:1;pointer-events:all}
+.nav-sidebar{position:fixed;top:0;left:0;width:270px;height:100%;background:#070f1a;border-right:1px solid rgba(255,255,255,.1);z-index:9999;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding-bottom:24px;overflow-y:auto}
+#navToggle:checked ~ .nav-sidebar{transform:translateX(0)}
 .nav-sb-head{padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:12px;margin-bottom:6px}
 .nav-sb-head img{width:38px;height:38px;border-radius:8px;flex-shrink:0}
-.nav-sb-head-text .t{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#ffffff}
-.nav-sb-head-text .s{font-size:9px;color:rgba(255,255,255,.45);letter-spacing:.07em;text-transform:uppercase;margin-top:1px}
+.nav-sb-head .t{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#fff}
+.nav-sb-head .s{font-size:9px;color:rgba(255,255,255,.45);letter-spacing:.07em;text-transform:uppercase;margin-top:1px}
 .nav-sb-section{padding:10px 14px 2px}
-.nav-sb-label{font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.45);padding:0 6px;margin-bottom:3px}
+.nav-sb-lbl{font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.45);padding:0 6px;margin-bottom:3px}
 .nav-sb-link{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;text-decoration:none;color:#d0d4da;font-size:13px;font-weight:500;transition:background .15s,color .15s;margin-bottom:1px}
-.nav-sb-link:hover{background:rgba(255,255,255,.07);color:#ffffff}
-.nav-sb-link.nav-active{background:rgba(204,30,43,.12);color:#ffffff;border-left:3px solid #cc1e2b;padding-left:7px}
-.nav-sb-link .nav-ic{font-size:14px;width:18px;text-align:center}
-.nav-sb-link .nav-soon{margin-left:auto;font-size:7.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(232,160,32,.12);color:#e8a020;border:1px solid rgba(232,160,32,.25);border-radius:3px;padding:2px 5px}
+.nav-sb-link:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav-sb-link.nav-active{background:rgba(204,30,43,.12);color:#fff;border-left:3px solid #cc1e2b;padding-left:7px}
+.nav-sb-link .ic{font-size:14px;width:18px;text-align:center}
 .nav-sb-div{height:1px;background:rgba(255,255,255,.1);margin:8px 14px}
+.nav-close{position:fixed;inset:0;z-index:9997;display:none;cursor:default}
+#navToggle:checked ~ .nav-close{display:block}
 
 </style>
 
@@ -260,355 +263,27 @@ var o=[];var l=Array.isArray(e);for(f=n.s.c;f<=n.e.c;++f)s[f]=ya(f);for(var c=n.
 </script>
 </head>
 <body>
-<button id="setupNavBtn" style="position:fixed;top:18px;left:18px;z-index:9000;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;"><span style="display:block;width:18px;height:2px;background:#fff;border-radius:2px"></span><span style="display:block;width:18px;height:2px;background:#fff;border-radius:2px"></span><span style="display:block;width:18px;height:2px;background:#fff;border-radius:2px"></span></button>
-
-<button class="nav-btn" id="navBtn"><span></span><span></span><span></span></button>
-<div class="nav-overlay" id="navOverlay"></div>
-<div class="nav-sidebar" id="navSidebar">
+<input type="checkbox" id="navToggle">
+<label class="nav-label" for="navToggle"><span></span><span></span><span></span></label>
+<label class="nav-close" for="navToggle"></label>
+<div class="nav-overlay"></div>
+<div class="nav-sidebar">
   <div class="nav-sb-head">
     <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQEBIQEBAPDhANEA8QEA4NEA8ODRANFREiFhURExMYHSggGBoxGxMTITEtMSkuLi4uFx9LOjUtNzQtLisBCgoKDg0OFxAQGC0dHyUtLS0rLSsrLS0tLS0tKy0tLS0tLS0rLS0rNy0tLS0tNzcrLSsrNy0tKysrLSstKysrLf/AABEIALQAtAMBEQACEQEDEQH/xAAcAAEBAAIDAQEAAAAAAAAAAAAABgQFAQIDBwj/xAA+EAACAQIBBwoDCAEDBQAAAAAAAQIDBBEFBhIWNFKyITFBVHN0kpPR0hNxkQciMkJRU2GBchShwhUjYoLB/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAECAwQGBQf/xAApEQEAAgIBBAIBBQADAQAAAAAAAQIDEQQFEiExE1FBBhQVFiIyUmFC/9oADAMBAAIRAxEAPwCg+0/7RJ2c/wDR2mj8bRxq1mtL4WPMkv1NjDh3DBe75PVzqyhOWlK9um3z4VZr/ZM2q44hh7nTWW/67dedP1J7IV2ay3/Xbrzp+o7INmst/wBduvOn6jsg2ay3/Xbrzp+o7INmst/12686fqOyDZrLf9duvOn6jsg2ay3/AF2686fqOyDZrLf9duvOn6jsg2ay3/Xbrzp+o7INmst/12686fqOyDZrLf8AXbrzp+o7INmst/12686fqOyDZrLf9duvOn6jsg2ay3/Xbrzp+o7INmst/wBduvOn6jsg2ay3/Xbrzp+o7INmst/12686fqOyDZrLf9duvOn6jsNmst/12686fqOyCLy22QftCyjaTUvjzuKaf3qVxKVRSj/EnypmO2GJZIyS+/5u5apX1tTuaWDjUXKpfihNc8H8jTtTU6bEXfm3PGq55QvJSeLdzVWPym0b+Ouoatpact52oE6NA0aBo0DRoGjQNGgaNA0aBo0DRoGjQNGgaNA0aBo0DRoGjQNGgiYlPgJg2+l/ZtlGrTtJxjNpK4qcn/pEx2jyvEonOzb7vvVfjZanpWWqLQrAAAAAAAAAAAAAAAAAAAAAAAAvswNll28+CJjn2uls7Nvu+9V+NlqekS1RaFYAAAAAAAAAAAAAAAAAAAAAAAF9mBssu3nwRMc+10tnZt933qvxstT0iWqLQrAAAAAAAAAAAAAAAAAAAAAAAAvswNll28+CJjn2uls7Nvu+9V+NlqekS1RaFYAAAAAAAAAAAAAAAAAAAAAAAF9mBssu3nwRMc+10tnZt933qvxstT0iWqLQrAAAAAAAAAAAAAAAAAAAAAAAAvswNll28+CJjn2uls7Nvu+9V+NlqekS1RaFYAAAAAAAAAAAAAAAnQEAAAAAAAL7MDZZdvPgiY59rpbOzb7vvVfjZanpEtUWhWAAAAAB4hMf+BHlEeXtbWs6jwgsX0voRr5uVWkN7icHJyrarDc08344fem9Lp0VyHl36p58Onw/pn/P+5d9X6e/L6RMf8pdm/rOP7NXqe/L6RJ/lbn9ax/Zq/T35fSJH8raPwf1rHH5dJ5vw6Kkl80Xr1WZ/DHf9MxPqWDeZIqU1pLCcVzuPOv6N3F1CmT/AD6ePzOh58FfHlkWGRo1KcZylJOWLwX6GvyepTintjy3+D0CM2Luv4lk6v09+X0ia0dWv+W7/W8cfk1fp78vpEn+Wn6P61in8uNX6e/L6RH8taPwf1qkflzq/Dfl9Ik/ysz+D+tYvzLU5UtY0p6EW3yYvE9XiZpy025nqfCrx8vZDDNqLbjTyo8eF9mBssu3nwRKT7XhLZ2bfd96r8bLU9Ilqi0KwAAAAGts60sIzjpzqRpqTaipc7NHPyLRPiHscTp1b13e/ayaeTaGK0riMl0xTisTXycrP2+Iehg6XxYv5vtuI1aFL7ilCGH5cYo8u1c+R0+LPxeLHbHh2/19H9yH1iYf2eX3pljqWH/syISTWK5U+VNdJhmJhvY8kXjcOcCsbmV7W1G2DPK1FNpz5YvB8jN2vDvaN6eRk61xqTqbPa2vadT8MlJro6TFl418f4bPH5+LP4pZkfyYIn8w3LVi0ds+WLWvaVL7kpKGCxSw/KbOPjXyf6jy8/Nz8HF/zedOtPKdGTUVNNyeCWEicvDy0jcwpi6txstorWWWjV9e4ervcbh4XN/TpvCckm1ikbGPj2yeoedyeo4cE6vLxWVqH7i+jM38df6a1+ucWa/8k3f1/iVZz51J8n+J0PExfFj04TqXInPmmzHNjxEbefH2vswNll28+CJjn2vCWzs2+771X42Wp6RLVFoVgE+ZRM69AtMVX7Zn0FYtEp7Lw7QjpNRXK5NJFL5O2GTBgva0MjKM1p6C/DSioL/7/uYuPWLV3Zt861u6K19QZMpKVRY/hgnOX+KI5MxWvhk6fim2TumfDxuKunOU3zyk2Xx6q1uXkyZMu4cUaenKMVzyaQzXitZlbjYcmTLETK0pU1FKK/KsEcllybtL6dx6fFiirpc1dGE5bqbMmGkTMbU515phnSLbxeP6vFnV0nHFYfL81b2vMxEtnkK2k6ing1GHPJ9P8Ghz8tJpqHudC4uec8X9QpznJiItqHfeYS+cE062HPoxUX8zpuBTtrt87/UGWLcjUSZv0dKtj0Qi5f3zDqOSIppb9P8AHm+fv+lQc1E78PoM21CRyxW060+nReiv6Oo4OLtxvmnWc/fypYZva8PI3OgICRfZgbLLt58ETHPteEtnZt933qvxstT0iWqLQqEwem4yDYRnjUmk4r7qT5nLePH5/KmviHVdE6bGX/Vo8Nx/0+j+3D6HkRzMsOp/isH/AFdo2NKLxjCKa5U0uYieVlstTp3Hp+HDsaX7cG3/AAWnlZYjwT07jWnzDtCzprHCEUmsHgudGP8Ac5JjcytTp+CkTEQ6/wCgo/tw+haOZkspHS+P/wBXanaU4tOMIprmaRW3JyX8L4+nYaW7oh7mGW9EfhxJJpppPHoZNZn8K3pFo1Lp8GO7HwovGbJ3a2168TDWf+Lulh+mBWbXvbTN20x13Hhrso5VhTTUXpT6Evwr5nocXgTe25eF1HrFcVZpE+UzObbbfK28WzoqUildOAy5pzWm0+1Bm3SwhKe9LBfJHgdUyf707f8ATXH7cU2ltbipoxlLojFs8/BTd4e/y8sY8NpRLli8f1eJ19I7aQ+Vci/yZJs4L/8AywgAC+zA2WXbz4ImOfa6Wzs2+771X42Wp6RLVFoVetrbTqS0YLF87/iJhz54w0mW7wuJfkXikQsLWgqcIwX5Vh82cnmy/JebPpnC48YMUVhxd3MaUdKXMuZLnbJw4pvOoOZzacak2sn62WK039zGP6RgsZHtU4OPHXcuMydZ5We8/FHh1p5Vr039/F/+M1hiW/Z4svpFOrcrBbeSPDfWF7GtHFcjXJKL50eNyeLOG/8A463p3Uacqu49so1fD1PANI8GJH+teUtJlnKc6dTRg0sI4yxWPKe3w+HW9Ny5HrHVsmDL2Uln5Ju/i003hpLkl/kaXLwfFZ6/Sub+5xb/AC9ryjpwlHlTa5Gn0mLjXit9y2OfjtkxTWEZKODwfI08GdZhtFq7h8v5EWpkmLOC1p1G2PHXflZZOo6FKEf0ji/mzkuZk7sr6h0zFOPj1hi5fraNHDpnJR/o2enYt5NtD9QZ/jw6+0udK+eTOwlAAAvswNll28+CJjn2uls7Nvu+9V+NlqekS1RKsKTIVGMKek3FSqcrxfNHoPA6he157Yd50GmLFi7pny2fxI70fFE8z4LRGtPfjl4/tO5w19KooppqMeTB8mkz3unYopTdocZ1zlRlzRSJ8Nxk6hTpQSTji1jJ4x0nI87lXy5LzEenv9OpxsOGPW3rdU6dSLjJxeK5HjHkMWH5qWiWXl142akxOk7kqp8Ovo4rBtxbx5Gexy8fy4d/lynTc1ePy5rHpUfFjvR+sTn/AILfTuo5mLXtx8WO9H6xHw3+k/vMP2OrHej9Yl64bz7hW3LwxWZ7kff1tOrOXQ3yfI6bi4opjh816lmjPmm9WZkG60Kmi+SNRYcvRI1ufx/kpuHo9B53w5eyfUqV1Y70frE5/wCC8fh3P7rHvUymsvUEqmnFpqosXg+ZnRcC0/H5cJ1zDSuTvqwrKnpVIR5Fi1jjum1yJn4vDzen0i+eIn0sVVjvR8UTlL4Lzben0zHyccViNp/OOvpTjFNNRji8H0s9zp2Ga+Zcf+oeXGS8ViWoPWcsAAAF9mBssu3nwRMc+10tnZt933qvxstT0iWqLQrAVmlZ/DJGW8epCOyv0n5r/YWiIUm0zO5CvZX6W+a/2Dsr9HzX+wtqFO6d7CvZX6ZPmv8AYOyv0fNf7B2V+kfNf7CzGDSYmY8wFeyv0yfNf7C0ViPStr2t7kExtWJmPMBXsr9MnzX+wtERHpS1pt7CVQAAAvswNll28+CJjn2uls7Nvu+9V+NlqekS1RaFYAAAAAAAAAAAAAAAAAAAAAAAF9mBssu3nwRMc+10tnZt933qvxstT0iWqLQrAAAAAAAAAAAAAAAAAAAAAAAAvswNll28+CJjn2uls7Nvu+9V+NlqekS1RaFYAAAAAAAAAAAAAAAAAAAAAAAF9mBssu3nwRMc+10tnZt933qvxstT0iWqLQrAAAAAAAAAAAAAAAAAAAAAAAAvswNll28+CJjn2uls7Nvu+9V+NlqelZaotCAAAAAAAAAAAAAAAAAAAAAAABfZgbLLt58ETHPteEtnXt933qvxstT0rePLVExJPoJQAAAAAAAAAAAAAAAAAAAAAAX2YGyy7efBEpMeUw1n2m5FnaZRr6Sap3M3WpS/LJTli4/NMphvuGTJHlKGXTHPoJQAAAAAAAAAAAAAAAAAAAAAETKdPuf2ZZn4ZPhO4jhOvOVVRkvvRptJRT8OP9mrbL5Za08LfL+Qba+pfCuaaqRwxT5pwl+sZdBr1mYZ7Q+P5VzBtKVWUYzuME+TGcH/AMTfifDVsxdSLXfuPHD2kqmpFrv3Hjh7RsNSLXfuPHD2jYakWu/ceOHtGw1Itd+48cPaNhqRa79x44e0bDUi137jxw9o2GpFrv3Hjh7RsNSLXfuPHD2jYakWu/ceOHtGw1Itd+48cPaNhqRa79x44e0bDUi137jxw9o2GpFrv3Hjh7RsNSLXfuPHD2jYakWu/ceOHtGw1Itd+48cPaNhqRa79x44e0bDUi137jxw9pYlZZlfZ7YR/wC/OFSvODxiq8oypqX66KSx/s1c1phnxw+nJYGqzv/Z" alt="RT">
-    <div class="nav-sb-head-text"><div class="t">Revolution Ops</div><div class="s">Operations Dashboard</div></div>
+    <div><div class="t">Revolution Ops</div><div class="s">Operations Dashboard</div></div>
   </div>
-  <div class="nav-sb-section">
-    <div class="nav-sb-label">🚛 Trucking</div>
-    <a class="nav-sb-link" href="revolution_3driver_summary.html"><span class="nav-ic">📋</span>Regulated Fleet</a>
-<a class="nav-sb-link nav-active" href="revolution_unregulated_summary.html"><span class="nav-ic">🚚</span>Unregulated Fleet</a>
-<a class="nav-sb-link" href="revolution_wow_comparison.html"><span class="nav-ic">📊</span>Week over Week</a>
-
+  <div class="nav-sb-section"><div class="nav-sb-lbl">🚛 Trucking</div>
+    <a class="nav-sb-link" href="revolution_3driver_summary.html"><span class="ic">📋</span>Regulated Fleet</a>
+    <a class="nav-sb-link nav-active" href="revolution_unregulated_summary.html"><span class="ic">🚚</span>Unregulated Fleet</a>
+    <a class="nav-sb-link" href="revolution_wow_comparison.html"><span class="ic">📊</span>Week over Week</a>
   </div>
   <div class="nav-sb-div"></div>
-  <div class="nav-sb-section">
-    <div class="nav-sb-label">🔁 Transport</div>
-    <a class="nav-sb-link" href="revolution_broker_summary.html"><span class="nav-ic">📦</span>Broker Summary</a>
-    <a class="nav-sb-link" href="#"><span class="nav-ic">📈</span>Week over Week<span class="nav-soon">Soon</span></a>
+  <div class="nav-sb-section"><div class="nav-sb-lbl">🔁 Transport</div>
+    <a class="nav-sb-link" href="revolution_broker_summary.html"><span class="ic">📦</span>Broker Summary</a>
+    <a class="nav-sb-link" href="revolution_broker_wow.html"><span class="ic">📈</span>Week over Week</a>
   </div>
 </div>
 
-<!-- ══ SETUP ══ -->
-<div id="setup">
-  <div class="brand">RT &nbsp;REVOLUTION TRUCKING</div>
-  <div class="setup-heading">Unregulated Fleet Summary</div>
-  <div class="setup-sub">Upload Ascend CSV export &middot; set period label &middot; generate one-page business review</div>
-
-  <div class="setup-card">
-
-    <!-- Driver constants display -->
-    <div class="driver-constants">
-      <div class="dc-title">&#9632; Hardcoded Drivers &amp; Rates</div>
-      <div class="dc-grid">
-        <div class="dc-item"><div class="dc-name">Lee Marvin Wade</div><div class="dc-rate">$0.95/mi · $0.25 DH</div><div class="dc-unit">Unit 1015</div></div>
-        <div class="dc-item"><div class="dc-name">Malik Brown</div><div class="dc-rate">$0.95/mi · $0.25 DH</div><div class="dc-unit">Unit 1026</div></div>
-        <div class="dc-item"><div class="dc-name">Kyle Green</div><div class="dc-rate">$0.95/mi · $0.25 DH</div><div class="dc-unit">Unit 1027</div></div>
-        <div class="dc-item"><div class="dc-name">Adam Long</div><div class="dc-rate">$0.95/mi · $0.25 DH</div><div class="dc-unit">Unit 1028</div></div>
-        <div class="dc-item"><div class="dc-name">Kenny Keaton</div><div class="dc-rate">$0.95/mi · $0.25 DH</div><div class="dc-unit">Unit 1029</div></div>
-        <div class="dc-item"><div class="dc-name">Brennen Walter</div><div class="dc-rate">$0.30/mi all miles</div><div class="dc-unit">Unit 1030</div></div>
-        <div class="dc-item"><div class="dc-name">Darin Barker</div><div class="dc-rate">$0.75/mi · $0.25 DH</div><div class="dc-unit">Unit 1145</div></div>
-        <div class="dc-item"><div class="dc-name">Gregory Buchholz</div><div class="dc-rate">$0.80/mi · $0.25 DH</div><div class="dc-unit">Unit 1275</div></div>
-        <div class="dc-item"><div class="dc-name">Jaina Blu</div><div class="dc-rate">$0.80/mi · $0.25 DH</div><div class="dc-unit">Unit 1294</div></div>
-        <div class="dc-item"><div class="dc-name">George Salas</div><div class="dc-rate">$0.80/mi · $0.25 DH</div><div class="dc-unit">Unit 1335</div></div>
-        <div class="dc-item"><div class="dc-name">Phillip Dupree</div><div class="dc-rate">$0.80/mi · $0.25 DH</div><div class="dc-unit">Unit 1337</div></div>
-        <div class="dc-item"><div class="dc-name">Ronsey Merritt</div><div class="dc-rate">$0.75/mi · $0.25 DH</div><div class="dc-unit"></div></div>
-      </div>
-    </div>
-
-    <!-- Upload -->
-    <div>
-      <label>Ascend Load Export (.csv or .xlsx)</label>
-      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
-        <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleFile(this.files[0])">
-        <div class="uz-icon">📂</div>
-        <div class="uz-text"><strong>Click to upload</strong> or drag &amp; drop</div>
-        <div class="uz-hint">Ascend CSV export — same format as ascend_loads_export_*.csv</div>
-        <div class="uz-file" id="uploadFilename"></div>
-      </div>
-    </div>
-
-    <div class="field-row">
-      <div><label>Period Label</label><input type="text" id="periodLabel" placeholder="e.g. April 2026"></div>
-      <div><label>Prepared By</label><input type="text" id="preparedBy" value="Ryan Capps"></div>
-    </div>
-
-    <div class="err" id="errMsg"></div>
-    <button class="btn-gen" id="btnGen" disabled onclick="generate()">Upload a file to continue</button>
-  </div>
-</div>
-
-<!-- ══ SUMMARY ══ -->
-<div id="summary">
-  <div class="toolbar">
-    <div style="display:flex;align-items:center;gap:10px">
-      <button class="btn-back" onclick="goBack()">← New Report</button>
-      <div class="tbar-info" id="tbarInfo"></div>
-    </div>
-    <button class="btn-print" onclick="window.print()">🖨 Print / Save PDF</button>
-  </div>
-  <div class="sum-wrap">
-    <div class="page" id="pageOut"></div>
-  </div>
-</div>
-
-<script>
-// ── DRIVER CONSTANTS ──
-const DRIVERS = [
-  {name:'Lee Marvin Wade',  unit:'1015', rate:0.95, dh:0.25},
-  {name:'Malik Brown',      unit:'1026', rate:0.95, dh:0.25},
-  {name:'Kyle Green',       unit:'1027', rate:0.95, dh:0.25},
-  {name:'Adam Long',        unit:'1028', rate:0.95, dh:0.25},
-  {name:'Kenny Keaton',     unit:'1029', rate:0.95, dh:0.25},
-  {name:'Brennen Walter',   unit:'1030', rate:0.30, dh:0.30, allMiles:true},
-  {name:'Darin Barker',     unit:'1145', rate:0.75, dh:0.25},
-  {name:'Gregory Buchholz', unit:'1275', rate:0.80, dh:0.25},
-  {name:'Jaina Blu',        unit:'1294', rate:0.80, dh:0.25},
-  {name:'George Salas',     unit:'1335', rate:0.80, dh:0.25},
-  {name:'Phillip Dupree',   unit:'1337', rate:0.80, dh:0.25},
-  {name:'Ronsey Merritt',   unit:'',     rate:0.75, dh:0.25},
-];
-// Name aliases (TMS typos)
-const ALIASES = {'Brennan Walter':'Brennen Walter'};
-
-let parsedRows = [];
-
-// ── FILE HANDLING ──
-function handleFile(file) {
-  if (!file) return;
-  const ext = file.name.split('.').pop().toLowerCase();
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      let rows;
-      if (ext === 'csv') {
-        const wb = XLSX.read(e.target.result, {type:'binary', cellDates:true});
-        rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:null});
-      } else {
-        const wb = XLSX.read(e.target.result, {type:'array', cellDates:true});
-        // Find sheet with most load rows
-        let best = null, bestCount = 0;
-        for (const sn of wb.SheetNames) {
-          const r = XLSX.utils.sheet_to_json(wb.Sheets[sn], {defval:null});
-          const valid = r.filter(row => row['Load ID'] && /\d/.test(String(row['Load ID'])));
-          if (valid.length > bestCount) { bestCount = valid.length; best = r; }
-        }
-        rows = best || [];
-      }
-      parsedRows = rows;
-      const loadCount = rows.filter(r => r['Load ID'] && /\d/.test(String(r['Load ID']))).length;
-      if (loadCount === 0) throw new Error('No load rows found. Check the file format.');
-      document.getElementById('uploadFilename').textContent = '✓ ' + file.name + ' — ' + loadCount + ' loads found';
-      document.getElementById('uploadZone').classList.add('has-file');
-      showErr('');
-      document.getElementById('btnGen').disabled = false;
-      document.getElementById('btnGen').textContent = 'Generate Summary (' + loadCount + ' loads)';
-    } catch(err) {
-      showErr(err.message);
-    }
-  };
-  if (ext === 'csv') reader.readAsBinaryString(file);
-  else reader.readAsArrayBuffer(file);
-}
-
-// drag and drop
-const uz = document.getElementById('uploadZone');
-uz.addEventListener('dragover', e => { e.preventDefault(); uz.style.borderColor='#cc1e2b'; });
-uz.addEventListener('dragleave', () => { uz.style.borderColor=''; });
-uz.addEventListener('drop', e => { e.preventDefault(); handleFile(e.dataTransfer.files[0]); });
-
-// ── PARSE ──
-function parseMoney(v) {
-  if (v === null || v === undefined) return 0;
-  return parseFloat(String(v).replace(/[$,]/g,'')) || 0;
-}
-function parseRows(rows) {
-  const loads = [];
-  for (const row of rows) {
-    const id = row['Load ID'];
-    if (!id || !/\d/.test(String(id)) || String(id) === 'Row Labels') continue;
-    let driver = String(row['Drivers'] || '').trim();
-    driver = ALIASES[driver] || driver;
-    const revenue  = parseMoney(row['Total Income']);
-    const expenses = parseMoney(row['Total Expenses']);
-    const gp       = parseMoney(row['Gross Profit/Loss']);
-    const loadedMi = parseFloat(row['Client Mileage']) || 0;
-    const dhMi     = parseFloat(row['Deadhead Mileage']) || 0;
-    let pickDate   = row['First Pick Date'];
-    if (pickDate && !(pickDate instanceof Date)) pickDate = new Date(pickDate);
-    const customer = String(row['Customer'] || '').trim();
-    const fromCity = String(row['First Pick City']||'').trim();
-    const fromState= String(row['First Pick State']||'').trim();
-    const toCity   = String(row['Last Drop City']||'').trim();
-    const toState  = String(row['Last Drop State']||'').trim();
-    loads.push({driver, revenue, expenses, gp, loadedMi, dhMi, pickDate, customer, fromCity, fromState, toCity, toState});
-  }
-  return loads;
-}
-
-// ── GENERATE ──
-function generate() {
-  const period  = document.getElementById('periodLabel').value || '';
-  const prepBy  = document.getElementById('preparedBy').value || '';
-  const allLoads = parseRows(parsedRows);
-
-  // Per-driver stats
-  const driverStats = DRIVERS.map(d => {
-    const loads = allLoads.filter(l => l.driver === d.name);
-    const loadCount  = loads.length;
-    const loadedMi   = r2(loads.reduce((s,l)=>s+l.loadedMi,0));
-    const dhMi       = r2(loads.reduce((s,l)=>s+l.dhMi,0));
-    const revenue    = r2(loads.reduce((s,l)=>s+l.revenue,0));
-    const expenses   = r2(loads.reduce((s,l)=>s+l.expenses,0));
-    const gp         = r2(loads.reduce((s,l)=>s+l.gp,0));
-    const gpPct      = revenue > 0 ? r2(gp/revenue*100) : 0;
-    const rpm        = loadedMi > 0 ? r2(revenue/loadedMi) : 0;
-    // Customer breakdown
-    const custMap = {};
-    loads.forEach(l => {
-      if (!l.customer) return;
-      if (!custMap[l.customer]) custMap[l.customer] = {loads:0,revenue:0};
-      custMap[l.customer].loads++;
-      custMap[l.customer].revenue += l.revenue;
-    });
-    const topCusts = Object.entries(custMap).sort((a,b)=>b[1].revenue-a[1].revenue).slice(0,3);
-    // Weekly pay periods (for reference display)
-    const hasNegGP = gp < 0;
-    return {...d, loadCount, loadedMi, dhMi, revenue, expenses, gp, gpPct, rpm, topCusts, hasNegGP};
-  });
-
-  // Fleet totals
-  const activeDrivers = driverStats.filter(d=>d.loadCount>0);
-  const fleetRev  = r2(driverStats.reduce((s,d)=>s+d.revenue,0));
-  const fleetExp  = r2(driverStats.reduce((s,d)=>s+d.expenses,0));
-  const fleetGP   = r2(driverStats.reduce((s,d)=>s+d.gp,0));
-  const fleetGPPct= fleetRev>0 ? r2(fleetGP/fleetRev*100) : 0;
-  const fleetMi   = driverStats.reduce((s,d)=>s+d.loadedMi,0);
-  const fleetLoads= driverStats.reduce((s,d)=>s+d.loadCount,0);
-  const fleetRPM  = fleetMi>0 ? r2(fleetRev/fleetMi) : 0;
-
-  // Top customers fleet-wide
-  const fleetCustMap = {};
-  allLoads.forEach(l => {
-    if (!l.customer) return;
-    if (!fleetCustMap[l.customer]) fleetCustMap[l.customer] = {loads:0,revenue:0,gp:0};
-    fleetCustMap[l.customer].loads += 1;
-    fleetCustMap[l.customer].revenue += l.revenue;
-    fleetCustMap[l.customer].gp += l.gp;
-  });
-  const topFleetCusts = Object.entries(fleetCustMap)
-    .sort((a,b)=>b[1].revenue-a[1].revenue).slice(0,8);
-
-  // Best/worst GP% drivers for meeting callouts
-  const sorted = [...activeDrivers].sort((a,b)=>b.gpPct-a.gpPct);
-
-  // ── RENDER DRIVER CARDS ──
-  // Figure out grid columns based on count
-  const cols = 4;
-  const driverCardsHtml = driverStats.map(d => {
-    const gpColor = d.gpPct >= 30 ? '#4ade80' : d.gpPct >= 20 ? '#e8a020' : '#f87171';
-    const gpBarW = Math.min(100, Math.max(0, d.gpPct * 2));
-    const rateLabel = d.allMiles ? `$${d.rate}/mi all miles` : `$${d.rate}/mi · $${d.dh} DH`;
-    const custHtml = d.topCusts.map(([cn,cv]) =>
-      `<span class="cust-tag" title="${cn}">${cn}</span>`).join('');
-    const negWarn = d.hasNegGP
-      ? `<div class="neg-gp-warn">&#9888; Negative GP — check carrier expenses in TMS</div>` : '';
-    return `<div class="dcard">
-      <div class="dhead">
-        <div>
-          <div class="dname">${d.name}</div>
-          <div class="dunit">Unit ${d.unit} &nbsp;&middot;&nbsp; <span style="color:#e8a020">${rateLabel}</span></div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-family:Arial,sans-serif;font-weight:800;font-size:11px;color:#ffffff">$${fmt(d.revenue)}</div>
-          <div style="font-size:7px;color:#d0d4da">${d.loadCount} loads</div>
-        </div>
-      </div>
-      <div style="border-top:1px solid rgba(255,255,255,.08)"></div>
-      <div class="dstats">
-        <div class="stat-row" style="grid-template-columns:auto 1fr auto 1fr;column-gap:6px">
-          <span class="lbl">Load Mi</span> <span class="val">${fmt(d.loadedMi)}</span>
-          <span class="lbl">DH Mi</span> <span class="val">${fmt(d.dhMi)}</span>
-        </div>
-        <div class="stat-row" style="grid-template-columns:auto 1fr auto 1fr;column-gap:6px">
-          <span class="lbl">Expenses</span> <span class="val red">$${fmt(d.expenses)}</span>
-          <span class="lbl">RPM</span> <span class="val gld">$${d.rpm}</span>
-        </div>
-        <div class="stat-row" style="grid-template-columns:auto 1fr auto 1fr;column-gap:6px">
-          <span class="lbl">GP</span> <span class="val" style="color:${gpColor}">$${fmt(d.gp)}</span>
-          <span class="lbl">GP%</span> <span class="val" style="color:${gpColor}">${d.gpPct}%</span>
-        </div>
-      </div>
-      <div class="gp-bar-wrap">
-        <div class="gp-bar-bg"><div class="gp-bar-fill" style="width:${gpBarW}%"></div></div>
-      </div>
-      ${negWarn}
-    </div>`;
-  }).join('');
-
-  // ── RENDER TOP CUSTOMERS ──
-  const custRowsHtml = topFleetCusts.map(([cn,cv],i) => {
-    const gpPct = cv.revenue>0 ? r2(cv.gp/cv.revenue*100) : 0;
-    const gpColor = gpPct>=30?'#4ade80':gpPct>=20?'#e8a020':'#f87171';
-    return `<tr style="border-bottom:0.5px solid rgba(255,255,255,.06)">
-      <td style="padding:4px 8px;font-size:8px;font-weight:600;color:#ffffff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px" title="${cn}">${cn}</td>
-      <td style="padding:4px 8px;font-size:8px;text-align:center;color:#d0d4da">${cv.loads}</td>
-      <td style="padding:4px 8px;font-size:8px;text-align:right;color:#ffffff;font-weight:600">$${fmt(r2(cv.revenue))}</td>
-      <td style="padding:4px 8px;font-size:8px;text-align:right;color:${gpColor};font-weight:600">$${fmt(r2(cv.gp))}</td>
-      <td style="padding:4px 8px;font-size:8px;text-align:right;color:${gpColor};font-weight:600">${gpPct}%</td>
-    </tr>`;
-  }).join('');
-
-  // ── RENDER MEETING CALLOUTS ──
-  const topDriver  = sorted[0];
-  const lowDriver  = sorted[sorted.length-1];
-  const callouts = `
-    <div class="csect">GP % Leaders</div>
-    ${sorted.slice(0,3).map(d=>`<div class="cl"><span class="lb">${d.name}</span><span class="vl grn">${d.gpPct}%</span></div>`).join('')}
-    <hr class="div">
-    <div class="csect">Watch List</div>
-    ${sorted.slice(-2).reverse().map(d=>`<div class="cl"><span class="lb">${d.name}</span><span class="vl red">${d.gpPct}%</span></div>`).join('')}
-    <hr class="div">
-    <div class="csect">Volume Leaders (Loads)</div>
-    ${[...activeDrivers].sort((a,b)=>b.loadCount-a.loadCount).slice(0,3).map(d=>`<div class="cl"><span class="lb">${d.name}</span><span class="vl">${d.loadCount} loads</span></div>`).join('')}
-    <hr class="div">
-    <div class="csect">Revenue Leaders</div>
-    ${[...activeDrivers].sort((a,b)=>b.revenue-a.revenue).slice(0,3).map(d=>`<div class="cl"><span class="lb">${d.name}</span><span class="vl gld">$${fmt(d.revenue)}</span></div>`).join('')}`;
-
-  document.getElementById('pageOut').innerHTML = `
-    <div class="hdr">
-      <div class="hdr-left">
-        <div class="hdr-brand">RT</div>
-        <div class="hdr-title">
-          <h1>Unregulated Fleet — Operations &amp; Business Review</h1>
-          <p>Owner-Operator Units &nbsp;&middot;&nbsp; ${period} &nbsp;&middot;&nbsp; Manager Review &nbsp;&middot;&nbsp; Confidential — Internal Use Only${prepBy?' &nbsp;&middot;&nbsp; '+prepBy:''}</p>
-        </div>
-      </div>
-      <div class="hdr-right">
-        <div><div class="wlabel">Period</div><div class="wdate">${period}</div></div>
-        <span class="ctag">Confidential</span>
-      </div>
-    </div>
-
-    <div class="kpibar" style="grid-template-columns:repeat(7,1fr)">
-      <div class="kpi hl"><div class="kv">$${fmt(fleetRev)}</div><div class="kl">Gross Revenue</div></div>
-      <div class="kpi"><div class="kv">$${fmt(fleetExp)}</div><div class="kl">Total Expenses</div></div>
-      <div class="kpi hl3"><div class="kv">$${fmt(fleetGP)}</div><div class="kl">Gross Profit</div></div>
-      <div class="kpi hl2"><div class="kv">${fleetGPPct}%</div><div class="kl">Fleet GP %</div></div>
-      <div class="kpi"><div class="kv">${fmt(fleetMi)}</div><div class="kl">Loaded Miles</div></div>
-      <div class="kpi hl4"><div class="kv">$${fleetRPM}</div><div class="kl">Avg RPM</div></div>
-      <div class="kpi"><div class="kv">${fleetLoads}</div><div class="kl">Total Loads</div></div>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:.08in;flex:1;min-height:0">
-      <div style="display:grid;grid-template-columns:1fr 200px;gap:8px;flex:1;min-height:0">
-        <div class="drivers-grid" style="grid-template-columns:repeat(4,1fr)">
-          ${driverCardsHtml}
-        </div>
-        <div>
-          <div class="panel" style="height:100%">
-            <div class="phead"><h3>&#9632; Meeting Callouts</h3></div>
-            <div class="pbody">${callouts}
-              <div class="fnote">${period}${prepBy?' · '+prepBy:''} · Revolution Trucking Ops</div>
-            </div>
-          </div>
-        </div>
-      </div>
 
         <div class="panel">
           <div class="phead"><h3>&#9632; Fleet Summary</h3></div>
@@ -684,27 +359,5 @@ function fmt(n){return Number(n).toLocaleString();}
 .dhead + .dstats { border-top: 1px solid rgba(255,255,255,.1) !important; }
 </style>
 
-<script id="navScript">
-function initNav(){
-  var sidebar=document.getElementById('navSidebar');
-  var overlay=document.getElementById('navOverlay');
-  if(!sidebar||!overlay)return;
-  function openNav(){sidebar.classList.add('open');overlay.classList.add('open');}
-  function closeNav(){sidebar.classList.remove('open');overlay.classList.remove('open');}
-  function toggle(){sidebar.classList.contains('open')?closeNav():openNav();}
-  var buttons=['navBtn','setupNavBtn'];
-  buttons.forEach(function(id){
-    var btn=document.getElementById(id);
-    if(btn){btn.onclick=toggle;}
-  });
-  overlay.onclick=closeNav;
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeNav();});
-}
-if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded',initNav);
-} else {
-  initNav();
-}
-</script>
 </body>
 </html>
