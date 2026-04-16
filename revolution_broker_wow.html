@@ -16,29 +16,7 @@
 body{font-family:'Barlow',sans-serif;background:var(--navy2);color:var(--white);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(204,30,43,.08) 0%,transparent 65%);pointer-events:none}
 
-/* Nav */
-.nav-btn{position:fixed;top:18px;left:18px;z-index:1000;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:background .2s}
-.nav-btn:hover{background:rgba(255,255,255,.13)}
-.nav-btn span{display:block;width:18px;height:2px;background:#fff;border-radius:2px;transition:all .25s cubic-bezier(.4,0,.2,1)}
-.nav-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-.nav-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
-.nav-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:998;opacity:0;pointer-events:none;transition:opacity .3s}
-.nav-overlay.open{opacity:1;pointer-events:all}
-.nav-sidebar{position:fixed;top:0;left:0;width:270px;height:100%;background:#070f1a;border-right:1px solid var(--border);z-index:999;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding-bottom:24px;overflow-y:auto}
-.nav-sidebar.open{transform:translateX(0)}
-.nav-sb-head{padding:20px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;margin-bottom:6px}
-.nav-sb-head img{width:38px;height:38px;border-radius:8px;flex-shrink:0}
-.nav-sb-head-text .t{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#fff}
-.nav-sb-head-text .s{font-size:9px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-top:1px}
-.nav-sb-section{padding:10px 14px 2px}
-.nav-sb-label{font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:0 6px;margin-bottom:3px}
-.nav-sb-link{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;text-decoration:none;color:var(--gray);font-size:13px;font-weight:500;transition:background .15s,color .15s;margin-bottom:1px}
-.nav-sb-link:hover{background:rgba(255,255,255,.07);color:#fff}
-.nav-sb-link.nav-active{background:rgba(204,30,43,.12);color:#fff;border-left:3px solid var(--red);padding-left:7px}
-.nav-sb-link .nav-ic{font-size:14px;width:18px;text-align:center}
-.nav-sb-link .nav-soon{margin-left:auto;font-size:7.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(232,160,32,.12);color:var(--gold);border:1px solid rgba(232,160,32,.25);border-radius:3px;padding:2px 5px}
-.nav-sb-div{height:1px;background:var(--border);margin:8px 14px}
+
 
 /* Setup */
 #setup{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:60px 20px 40px;gap:20px}
@@ -128,9 +106,65 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .footnote{font-size:9px;color:var(--muted);margin-top:4px;padding:0 4px}
 
 @media print{.toolbar,.nav-btn,.nav-overlay,.nav-sidebar{display:none}body{-webkit-print-color-adjust:exact;print-color-adjust:exact}#summary{padding:20px}}
+
+.nav-btn{position:fixed;top:18px;left:18px;z-index:1000;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:background .2s}
+.nav-btn:hover{background:rgba(255,255,255,.13)}
+.nav-btn span{display:block;width:18px;height:2px;background:#fff;border-radius:2px;transition:all .25s cubic-bezier(.4,0,.2,1)}
+.nav-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.nav-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:998;opacity:0;pointer-events:none;transition:opacity .3s}
+.nav-overlay.open{opacity:1;pointer-events:all}
+.nav-sidebar{position:fixed;top:0;left:0;width:270px;height:100%;background:#070f1a;border-right:1px solid rgba(255,255,255,.1);z-index:999;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding-bottom:24px;overflow-y:auto}
+.nav-sidebar.open{transform:translateX(0)}
+.nav-sb-head{padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.nav-sb-head img{width:38px;height:38px;border-radius:8px;flex-shrink:0}
+.nav-sb-head-text .t{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#fff}
+.nav-sb-head-text .s{font-size:9px;color:rgba(255,255,255,.45);letter-spacing:.07em;text-transform:uppercase;margin-top:1px}
+.nav-sb-section{padding:10px 14px 2px}
+.nav-sb-label{font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.45);padding:0 6px;margin-bottom:3px}
+.nav-sb-link{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;text-decoration:none;color:#d0d4da;font-size:13px;font-weight:500;transition:background .15s,color .15s;margin-bottom:1px}
+.nav-sb-link:hover{background:rgba(255,255,255,.07);color:#fff}
+.nav-sb-link.nav-active{background:rgba(204,30,43,.12);color:#fff;border-left:3px solid #cc1e2b;padding-left:7px}
+.nav-sb-link .nav-ic{font-size:14px;width:18px;text-align:center}
+.nav-sb-div{height:1px;background:rgba(255,255,255,.1);margin:8px 14px}
+
+
+.weeks-grid{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.week-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:8px;overflow:hidden}
+.wk-label{display:flex;align-items:center;gap:10px;padding:8px 14px;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.08)}
+.wk-num{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#cc1e2b;background:rgba(204,30,43,.12);border:1px solid rgba(204,30,43,.25);border-radius:4px;padding:2px 7px}
+.wk-dates{font-size:11px;font-weight:600;color:#e8a020}
+.wk-metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:0}
+.wk-metric{padding:10px 14px;border-right:.5px solid rgba(255,255,255,.06)}
+.wk-metric:last-child{border-right:none}
+.wk-metric-label{font-size:7px;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.4);font-weight:700;margin-bottom:4px}
+.wk-metric-val{font-size:14px;font-weight:800;line-height:1;margin-bottom:4px}
+.wk-metric-change{font-size:9px;min-height:14px}
+
 </style>
 </head>
 <body>
+<button class="nav-btn" id="navBtn"><span></span><span></span><span></span></button>
+<div class="nav-overlay" id="navOverlay"></div>
+<div class="nav-sidebar" id="navSidebar">
+  <div class="nav-sb-head">
+    <img src="data:image/jpeg;base64,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" alt="RT">
+    <div class="nav-sb-head-text"><div class="t">Revolution Ops</div><div class="s">Operations Dashboard</div></div>
+  </div>
+  <div class="nav-sb-section">
+    <div class="nav-sb-label">🚛 Trucking</div>
+    <a class="nav-sb-link" href="revolution_3driver_summary.html"><span class="nav-ic">📋</span>Regulated Fleet</a>
+    <a class="nav-sb-link" href="revolution_unregulated_summary.html"><span class="nav-ic">🚚</span>Unregulated Fleet</a>
+    <a class="nav-sb-link" href="revolution_wow_comparison.html"><span class="nav-ic">📊</span>Week over Week</a>
+  </div>
+  <div class="nav-sb-div"></div>
+  <div class="nav-sb-section">
+    <div class="nav-sb-label">🔁 Transport</div>
+    <a class="nav-sb-link" href="revolution_broker_summary.html"><span class="nav-ic">📦</span>Broker Summary</a>
+    <a class="nav-sb-link nav-active" href="revolution_broker_wow.html"><span class="nav-ic">📈</span>Week over Week</a>
+  </div>
+</div>
 <button class="nav-btn" id="navBtn"><span></span><span></span><span></span></button>
 <div class="nav-overlay" id="navOverlay"></div>
 <div class="nav-sidebar" id="navSidebar">
@@ -298,28 +332,46 @@ function generate(){
     return '<span class="change-cell '+cls+' '+arrow+'">'+diffStr+pctStr+'</span>';
   }
 
-  // Build rows
+  // Build week cards
   var rowsHtml='';
   weeks.forEach(function(wk,i){
     var prev=i>0?weeks[i-1]:null;
-    rowsHtml+='<tr>'
-      +'<td>'+wk.label+'</td>'
-      // Revenue group
-      +'<td class="group-rev rev-val">'+fmt(wk.revenue)+'</td>'
-      +'<td class="group-rev change-cell">'+changeCell(wk.revenue,prev?prev.revenue:null,true,false)+'</td>'
-      // Net group
-      +'<td class="group-gp gp-val">'+fmt(wk.net)+'</td>'
-      +'<td class="group-gp change-cell">'+changeCell(wk.net,prev?prev.net:null,true,false)+'</td>'
-      // GP % group
-      +'<td class="group-gp gp-val">'+fmtPct(wk.gp)+'</td>'
-      +'<td class="group-gp change-cell">'+changeCell(wk.gp,prev?prev.gp:null,false,true)+'</td>'
-      // Shipments group
-      +'<td class="group-ship ship-val">'+wk.loads+'</td>'
-      +'<td class="group-ship change-cell">'+changeCell(wk.loads,prev?prev.loads:null,false,false)+'</td>'
-      // Avg Rev/Shipment
-      +'<td class="group-ship avg-val">'+fmt(wk.avgRev)+'</td>'
-      +'<td class="group-ship change-cell">'+changeCell(wk.avgRev,prev?prev.avgRev:null,true,false)+'</td>'
-      +'</tr>';
+    var wkNum='Wk '+(i+1);
+    rowsHtml+='<div class="week-card">'
+      +'<div class="wk-label"><span class="wk-num">'+wkNum+'</span><span class="wk-dates">'+wk.label+'</span></div>'
+      +'<div class="wk-metrics">'
+        // Revenue
+        +'<div class="wk-metric">'
+          +'<div class="wk-metric-label">Revenue</div>'
+          +'<div class="wk-metric-val rev-val">'+fmt(wk.revenue)+'</div>'
+          +'<div class="wk-metric-change">'+changeCell(wk.revenue,prev?prev.revenue:null,true,false)+'</div>'
+        +'</div>'
+        // Net Revenue
+        +'<div class="wk-metric">'
+          +'<div class="wk-metric-label">Net Revenue</div>'
+          +'<div class="wk-metric-val gp-val">'+fmt(wk.net)+'</div>'
+          +'<div class="wk-metric-change">'+changeCell(wk.net,prev?prev.net:null,true,false)+'</div>'
+        +'</div>'
+        // GP %
+        +'<div class="wk-metric">'
+          +'<div class="wk-metric-label">GP %</div>'
+          +'<div class="wk-metric-val gp-val">'+fmtPct(wk.gp)+'</div>'
+          +'<div class="wk-metric-change">'+changeCell(wk.gp,prev?prev.gp:null,false,true)+'</div>'
+        +'</div>'
+        // Shipments
+        +'<div class="wk-metric">'
+          +'<div class="wk-metric-label">Shipments</div>'
+          +'<div class="wk-metric-val ship-val">'+wk.loads+'</div>'
+          +'<div class="wk-metric-change">'+changeCell(wk.loads,prev?prev.loads:null,false,false)+'</div>'
+        +'</div>'
+        // Avg Rev/Ship
+        +'<div class="wk-metric">'
+          +'<div class="wk-metric-label">Avg Rev/Ship</div>'
+          +'<div class="wk-metric-val avg-val">'+fmt(wk.avgRev)+'</div>'
+          +'<div class="wk-metric-change">'+changeCell(wk.avgRev,prev?prev.avgRev:null,true,false)+'</div>'
+        +'</div>'
+      +'</div>'
+    +'</div>';
   });
 
   // KPI bar
@@ -341,31 +393,8 @@ function generate(){
     +'<span style="font-weight:700;font-size:13px">'+period+'</span><span class="ctag">Confidential</span></div></div>'
     +kpiHtml
     +'<div class="section-title">■ Week over Week Breakdown <span>'+weeks.length+' weeks · ▲ green = increase &nbsp;▼ red = decrease vs prior week</span></div>'
-    +'<table class="wow-table">'
-    +'<thead><tr>'
-    +'<th style="text-align:left">Week</th>'
-    +'<th class="group-rev">Revenue</th>'
-    +'<th class="group-rev">Rev Change</th>'
-    +'<th class="group-gp">Net Revenue</th>'
-    +'<th class="group-gp">Net Change</th>'
-    +'<th class="group-gp">GP %</th>'
-    +'<th class="group-gp">GP % Change</th>'
-    +'<th class="group-ship">Shipments</th>'
-    +'<th class="group-ship">Ship Change</th>'
-    +'<th class="group-ship">Avg Rev/Ship</th>'
-    +'<th class="group-ship">Avg Change</th>'
-    +'</tr></thead>'
-    +'<tbody>'+rowsHtml+'</tbody>'
-    +'<tfoot><tr class="total-row">'
-    +'<td>TOTAL / AVG</td>'
-    +'<td class="group-rev rev-val">'+fmt(totRev)+'</td><td class="group-rev">—</td>'
-    +'<td class="group-gp gp-val">'+fmt(totNet)+'</td><td class="group-gp">—</td>'
-    +'<td class="group-gp gp-val">'+fmtPct(totGP)+'</td><td class="group-gp">—</td>'
-    +'<td class="group-ship ship-val">'+totLoads+'</td><td class="group-ship">—</td>'
-    +'<td class="group-ship avg-val">'+fmt(totAvg)+'</td><td class="group-ship">—</td>'
-    +'</tr></tfoot>'
-    +'</table>'
-    +'<div class="footnote">▲ / ▼ shows dollar change and % change vs prior week · First week has no comparison · Canceled/Draft shipments excluded</div>';
+    +'<div class="weeks-grid">'+rowsHtml+'</div>'
+    +'<div class="footnote">▲ / ▼ shows dollar and % change vs prior week · First week shows no change · Canceled/Draft shipments excluded</div>';
 
   document.getElementById('tbarInfo').textContent=period+' · '+weeks.length+' weeks · '+totLoads+' loads · '+fmt(totRev)+' revenue';
   document.getElementById('setup').style.display='none';
@@ -377,6 +406,18 @@ function showErr(msg){
   el.style.display=msg?'block':'none';
   el.textContent=msg;
 }
+</script>
+<script id="navScript">
+(function(){
+  var btn=document.getElementById('navBtn');
+  var overlay=document.getElementById('navOverlay');
+  var sidebar=document.getElementById('navSidebar');
+  function openNav(){btn.classList.add('open');sidebar.classList.add('open');overlay.classList.add('open');}
+  function closeNav(){btn.classList.remove('open');sidebar.classList.remove('open');overlay.classList.remove('open');}
+  btn.addEventListener('click',function(){sidebar.classList.contains('open')?closeNav():openNav();});
+  overlay.addEventListener('click',closeNav);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeNav();});
+})();
 </script>
 </body>
 </html>
