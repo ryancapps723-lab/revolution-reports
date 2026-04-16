@@ -452,20 +452,26 @@ function showErr(msg){
 </script>
 
 <script id="navScript">
-(function(){
-  function getBtn(){return document.getElementById('navBtn')||document.getElementById('setupNavBtn');}
-  var overlay=document.getElementById('navOverlay');
+function initNav(){
   var sidebar=document.getElementById('navSidebar');
-  function o(){sidebar.classList.add('open');overlay.classList.add('open');}
-  function c(){sidebar.classList.remove('open');overlay.classList.remove('open');}
-  function toggle(){sidebar.classList.contains('open')?c():o();}
-  var tb=document.getElementById('navBtn');
-  var sb=document.getElementById('setupNavBtn');
-  if(tb)tb.addEventListener('click',toggle);
-  if(sb)sb.addEventListener('click',toggle);
-  overlay.addEventListener('click',c);
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')c();});
-})();
+  var overlay=document.getElementById('navOverlay');
+  if(!sidebar||!overlay)return;
+  function openNav(){sidebar.classList.add('open');overlay.classList.add('open');}
+  function closeNav(){sidebar.classList.remove('open');overlay.classList.remove('open');}
+  function toggle(){sidebar.classList.contains('open')?closeNav():openNav();}
+  var buttons=['navBtn','setupNavBtn'];
+  buttons.forEach(function(id){
+    var btn=document.getElementById(id);
+    if(btn){btn.onclick=toggle;}
+  });
+  overlay.onclick=closeNav;
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')closeNav();});
+}
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',initNav);
+} else {
+  initNav();
+}
 </script>
 </body>
 </html>
