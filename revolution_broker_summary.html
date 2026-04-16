@@ -362,12 +362,12 @@ function generate() {
     <div class="section-title">■ Customer Breakdown <span>${Object.keys(custMap).length} customers · ${totalLoads} total shipments</span></div>
     <table class="data-table" id="custTable">
       <thead><tr>
-        <th class="sortable" onclick="sortTable('custTable',0,'str')">Customer ↕</th>
-        <th class="r sortable" onclick="sortTable('custTable',1,'num')">Loads ↕</th>
-        <th class="r sortable" onclick="sortTable('custTable',2,'num')">Revenue ↕</th>
-        <th class="r sortable" onclick="sortTable('custTable',3,'num')">Carrier Cost ↕</th>
-        <th class="r sortable" onclick="sortTable('custTable',4,'num')">Net Revenue ↕</th>
-        <th class="r sortable" onclick="sortTable('custTable',5,'num')">GP % ↕</th>
+        <th class="sortable" data-table="custTable" data-col="0" data-type="str">Customer ↕</th>
+        <th class="r sortable" data-table="custTable" data-col="1" data-type="num">Loads ↕</th>
+        <th class="r sortable" data-table="custTable" data-col="2" data-type="num">Revenue ↕</th>
+        <th class="r sortable" data-table="custTable" data-col="3" data-type="num">Carrier Cost ↕</th>
+        <th class="r sortable" data-table="custTable" data-col="4" data-type="num">Net Revenue ↕</th>
+        <th class="r sortable" data-table="custTable" data-col="5" data-type="num">GP % ↕</th>
       </tr></thead>
       <tbody>${custRows}</tbody>
     </table>
@@ -375,12 +375,12 @@ function generate() {
     <div class="section-title">■ Weekly Summary <span>Sun–Sat periods</span></div>
     <table class="data-table" id="weekTable">
       <thead><tr>
-        <th class="sortable" onclick="sortTable('weekTable',0,'str')">Week ↕</th>
-        <th class="r sortable" onclick="sortTable('weekTable',1,'num')">Loads ↕</th>
-        <th class="r sortable" onclick="sortTable('weekTable',2,'num')">Revenue ↕</th>
-        <th class="r sortable" onclick="sortTable('weekTable',3,'num')">Carrier Cost ↕</th>
-        <th class="r sortable" onclick="sortTable('weekTable',4,'num')">Net Revenue ↕</th>
-        <th class="r sortable" onclick="sortTable('weekTable',5,'num')">Margin % ↕</th>
+        <th class="sortable" data-table="weekTable" data-col="0" data-type="str">Week ↕</th>
+        <th class="r sortable" data-table="weekTable" data-col="1" data-type="num">Loads ↕</th>
+        <th class="r sortable" data-table="weekTable" data-col="2" data-type="num">Revenue ↕</th>
+        <th class="r sortable" data-table="weekTable" data-col="3" data-type="num">Carrier Cost ↕</th>
+        <th class="r sortable" data-table="weekTable" data-col="4" data-type="num">Net Revenue ↕</th>
+        <th class="r sortable" data-table="weekTable" data-col="5" data-type="num">Margin % ↕</th>
       </tr></thead>
       <tbody>${weekRows}</tbody>
     </table>
@@ -391,11 +391,25 @@ function generate() {
 
   document.getElementById('setup').style.display = 'none';
   document.getElementById('summary').style.display = 'block';
+  setTimeout(initSortable, 50);
 }
 
 
 // ── Sortable tables ──
 const sortState = {};
+
+function initSortable() {
+  document.querySelectorAll('th.sortable').forEach(th => {
+    th.style.cursor = 'pointer';
+    th.addEventListener('click', function() {
+      const tableId = this.dataset.table;
+      const col = parseInt(this.dataset.col);
+      const type = this.dataset.type;
+      sortTable(tableId, col, type);
+    });
+  });
+}
+
 function sortTable(tableId, col, type) {
   const table = document.getElementById(tableId);
   const tbody = table.querySelector('tbody');
