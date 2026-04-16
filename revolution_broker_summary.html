@@ -360,27 +360,27 @@ function generate() {
     </div>
 
     <div class="section-title">■ Customer Breakdown <span>${Object.keys(custMap).length} customers · ${totalLoads} total shipments</span></div>
-    <table class="data-table">
+    <table class="data-table" id="custTable">
       <thead><tr>
-        <th>Customer</th>
-        <th class="r">Loads</th>
-        <th class="r">Revenue</th>
-        <th class="r">Carrier Cost</th>
-        <th class="r">Net Revenue</th>
-        <th class="r">GP %</th>
+        <th class="sortable" onclick="sortTable('custTable',0,'str')">Customer ↕</th>
+        <th class="r sortable" onclick="sortTable('custTable',1,'num')">Loads ↕</th>
+        <th class="r sortable" onclick="sortTable('custTable',2,'num')">Revenue ↕</th>
+        <th class="r sortable" onclick="sortTable('custTable',3,'num')">Carrier Cost ↕</th>
+        <th class="r sortable" onclick="sortTable('custTable',4,'num')">Net Revenue ↕</th>
+        <th class="r sortable" onclick="sortTable('custTable',5,'num')">GP % ↕</th>
       </tr></thead>
       <tbody>${custRows}</tbody>
     </table>
 
     <div class="section-title">■ Weekly Summary <span>Sun–Sat periods</span></div>
-    <table class="data-table">
+    <table class="data-table" id="weekTable">
       <thead><tr>
-        <th>Week</th>
-        <th class="r">Loads</th>
-        <th class="r">Revenue</th>
-        <th class="r">Carrier Cost</th>
-        <th class="r">Net Revenue</th>
-        <th class="r">Margin %</th>
+        <th class="sortable" onclick="sortTable('weekTable',0,'str')">Week ↕</th>
+        <th class="r sortable" onclick="sortTable('weekTable',1,'num')">Loads ↕</th>
+        <th class="r sortable" onclick="sortTable('weekTable',2,'num')">Revenue ↕</th>
+        <th class="r sortable" onclick="sortTable('weekTable',3,'num')">Carrier Cost ↕</th>
+        <th class="r sortable" onclick="sortTable('weekTable',4,'num')">Net Revenue ↕</th>
+        <th class="r sortable" onclick="sortTable('weekTable',5,'num')">Margin % ↕</th>
       </tr></thead>
       <tbody>${weekRows}</tbody>
     </table>
