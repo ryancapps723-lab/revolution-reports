@@ -121,13 +121,13 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="setup-brand-text"><div class="n">Revolution <span>Transport</span></div><div class="s">Broker Week over Week</div></div>
   </div>
   <div class="setup-card">
-    <div class="setup-title">Upload Turvo Customer Summary Report</div>
+    <div class="setup-title">Upload Turvo Shipment Summary Report</div>
     <div class="field"><label>Period / Title</label><input type="text" id="periodLabel" placeholder="e.g. Q1 2026 · Jan–Mar"></div>
     <div class="upload-zone" id="uploadZone">
       <div class="uz-icon">📂</div>
       <div class="uz-text"><strong>Click to upload</strong> Turvo Customer Summary (.xls / .xlsx)</div>
       <div id="fileStatus" class="uz-file"></div>
-      <div class="uz-hint">Export from Turvo → Reports → Customers → Customer Summary</div>
+      <div class="uz-hint">Turvo → Reports → Shipments → Shipment Summary</div>
       <input type="file" id="fileInput" accept=".xls,.xlsx" style="display:none">
     </div>
     <div class="err" id="errMsg"></div>
@@ -179,10 +179,10 @@ function generate(){
   parsedRows.forEach(function(row){
     var status=String(row['Status']||'').trim();
     if(SKIP.indexOf(status)>=0)return;
-    var customer=String(row['Customer']||'').trim();
+    var customer=String(row['Primary Customer']||row['Customer']||'').trim();
     if(!customer||customer==='Unknown')return;
-    var revenue=parseFloat(row['Customer bill'])||parseFloat(row['Revenue'])||0;
-    var net=parseFloat(row['Net revenue'])||0;
+    var revenue=parseFloat(String(row['Customer bill']||'0').replace(/[$,]/g,''))||0;
+    var net=parseFloat(String(row['Net revenue']||'0').replace(/[$,]/g,''))||0;
     var pickDate=null;
     var pd=row['Pickup date']||row['Pickup Date'];
     if(pd){try{pickDate=new Date(pd);}catch(e){}}
