@@ -313,6 +313,33 @@ document.getElementById('backBtn').addEventListener('click',function(){
 });
 document.getElementById('genBtn').addEventListener('click',generate);
 
+function attachSort(tableId, data, defaultCol, defaultAsc, renderFn) {
+  var state = {col: defaultCol, asc: defaultAsc};
+  var ths = document.querySelectorAll('#'+tableId+' th');
+  function doSort() {
+    data.sort(function(a,b){
+      var av=a[state.col], bv=b[state.col];
+      if(typeof av==='string') return state.asc?av.localeCompare(bv):bv.localeCompare(av);
+      return state.asc?av-bv:bv-av;
+    });
+    var tbody=document.querySelector('#'+tableId+' tbody');
+    tbody.innerHTML=data.map(renderFn).join('');
+    ths.forEach(function(th){
+      th.classList.remove('sort-asc','sort-desc','sort-none');
+      th.classList.add(th.dataset.col===state.col?(state.asc?'sort-asc':'sort-desc'):'sort-none');
+    });
+  }
+  ths.forEach(function(th){
+    th.classList.add('sort-none');
+    th.addEventListener('click',function(){
+      if(state.col===this.dataset.col){state.asc=!state.asc;}
+      else{state.col=this.dataset.col;state.asc=(this.dataset.type==='str');}
+      doSort();
+    });
+  });
+  doSort();
+}
+
 function generate(){
   if(!parsedRows){showErr('Please upload a file first.');return;}
   var period=document.getElementById('periodLabel').value||'All Periods';
@@ -376,8 +403,7 @@ function generate(){
     if(!carrMap[l.carrier])carrMap[l.carrier]={loads:0,pay:0,miles:0,milesCount:0};
     carrMap[l.carrier].loads++;
     carrMap[l.carrier].pay+=l.carrierCost;
-    if(l.miles){carrMap[l.carrier].miles+=l.miles;carrMap[l.carrier].milesCount++;}
-    if(l.miles&&l.miles>=minMiles){carrMap[l.carrier].rpmMiles=carrMap[l.carrier].rpmMiles||0;carrMap[l.carrier].rpmMiles+=l.miles;carrMap[l.carrier].rpmPay=carrMap[l.carrier].rpmPay||0;carrMap[l.carrier].rpmPay+=l.carrierCost;}
+    if(l.miles&&l.miles>=150){carrMap[l.carrier].miles=(carrMap[l.carrier].miles||0)+l.miles;carrMap[l.carrier].milesCount=(carrMap[l.carrier].milesCount||0)+1;carrMap[l.carrier].rpmMiles=(carrMap[l.carrier].rpmMiles||0)+l.miles;carrMap[l.carrier].rpmPay=(carrMap[l.carrier].rpmPay||0)+l.carrierCost;}
   });
   var carrData=Object.entries(carrMap).map(function(e){
     var rpm=e[1].rpmMiles>0?r2(e[1].rpmPay/e[1].rpmMiles):null;
@@ -407,38 +433,45 @@ function generate(){
 
   // Build customer table
   function buildCustTable(data){
-    var rows=data.map(function(cv){
-      var gpColor=cv.gp>=30?'#4ade80':cv.gp>=15?'#e8a020':'#f87171';
-      var barW=Math.min(100,Math.max(0,cv.gp));
-      var barColor=cv.gp>=30?'#4ade80':cv.gp>=15?'#e8a020':'#cc1e2b';
-      return '<tr><td class="name" title="'+cv.name+'">'+cv.name+'</td>'
-        +'<td class="r">'+cv.loads+'</td>'
-        +'<td class="r" style="color:#fff;font-weight:600">'+fmt(cv.revenue)+'</td>'
-        +'<td class="r" style="color:#f87171">'+fmt(cv.carrierCost)+'</td>'
-        +'<td class="r" style="color:'+(cv.net>=0?'#4ade80':'#f87171')+';font-weight:600">'+fmt(cv.net)+'</td>'
-        +'<td class="r"><div class="gp-bar-wrap"><div class="gp-bar"><div class="gp-bar-fill" style="width:'+barW+'%;background:'+barColor+'"></div></div>'
-        +'<span style="color:'+gpColor+'">'+fmtPct(cv.gp)+'</span></div></td></tr>';
-    }).join('');
-    return '<table class="data-table"><thead><tr>'
-      +'<th>Customer</th><th class="r">Loads</th><th class="r">Revenue</th>'
-      +'<th class="r">Carrier Cost</th><th class="r">Net Rev</th><th class="r">GP %</th>'
-      +'</tr></thead><tbody>'+rows+'</tbody></table>';
+    return '<table class="data-table" id="custTable"><thead><tr>'
+      +'<th data-col="name" data-type="str">Customer</th>'
+      +'<th class="r" data-col="loads" data-type="num">Loads</th>'
+      +'<th class="r" data-col="revenue" data-type="num">Revenue</th>'
+      +'<th class="r" data-col="carrierCost" data-type="num">Carrier Cost</th>'
+      +'<th class="r" data-col="net" data-type="num">Net Rev</th>'
+      +'<th class="r" data-col="gp" data-type="num">GP %</th>'
+      +'</tr></thead><tbody id="custBody"></tbody></table>';
+  }
+  function renderCustRow(cv){
+    var gpColor=cv.gp>=30?'#4ade80':cv.gp>=15?'#e8a020':'#f87171';
+    var barW=Math.min(100,Math.max(0,cv.gp));
+    var barColor=cv.gp>=30?'#4ade80':cv.gp>=15?'#e8a020':'#cc1e2b';
+    return '<tr><td class="name" title="'+cv.name+'">'+cv.name+'</td>'
+      +'<td class="r">'+cv.loads+'</td>'
+      +'<td class="r" style="color:#fff;font-weight:600">'+fmt(cv.revenue)+'</td>'
+      +'<td class="r" style="color:#f87171">'+fmt(cv.carrierCost)+'</td>'
+      +'<td class="r" style="color:'+(cv.net>=0?'#4ade80':'#f87171')+';font-weight:600">'+fmt(cv.net)+'</td>'
+      +'<td class="r"><div class="gp-bar-wrap"><div class="gp-bar"><div class="gp-bar-fill" style="width:'+barW+'%;background:'+barColor+'"></div></div>'
+      +'<span style="color:'+gpColor+'">'+fmtPct(cv.gp)+'</span></div></td></tr>';
   }
 
   // Build carrier table
   function buildCarrTable(data){
-    var rows=data.slice(0,20).map(function(cv){
-      return '<tr><td class="name" title="'+cv.name+'">'+cv.name+'</td>'
-        +'<td class="r">'+cv.loads+'</td>'
-        +'<td class="r" style="color:#f87171;font-weight:600">'+fmt(cv.pay)+'</td>'
-        +'<td class="r" style="color:#93c5fd">'+(cv.miles>0?fmtN(cv.miles)+' mi':'—')+'</td>'
-        +'<td class="r" style="color:#e8a020">'+(cv.rpm?'$'+cv.rpm.toFixed(2)+'/mi':'—')+'</td>'
-        +'</tr>';
-    }).join('');
-    return '<table class="data-table"><thead><tr>'
-      +'<th>Carrier</th><th class="r">Loads</th><th class="r">Carrier Pay</th>'
-      +'<th class="r">Est. Miles</th><th class="r">RPM</th>'
-      +'</tr></thead><tbody>'+rows+'</tbody></table>';
+    return '<table class="data-table" id="carrTable"><thead><tr>'
+      +'<th data-col="name" data-type="str">Carrier</th>'
+      +'<th class="r" data-col="loads" data-type="num">Loads</th>'
+      +'<th class="r" data-col="pay" data-type="num">Carrier Pay</th>'
+      +'<th class="r" data-col="miles" data-type="num">Est. Miles</th>'
+      +'<th class="r" data-col="rpm" data-type="num">RPM</th>'
+      +'</tr></thead><tbody id="carrBody"></tbody></table>';
+  }
+  function renderCarrRow(cv){
+    return '<tr><td class="name" title="'+cv.name+'">'+cv.name+'</td>'
+      +'<td class="r">'+cv.loads+'</td>'
+      +'<td class="r" style="color:#f87171;font-weight:600">'+fmt(cv.pay)+'</td>'
+      +'<td class="r" style="color:#93c5fd">'+(cv.miles>0?fmtN(cv.miles)+' mi':'—')+'</td>'
+      +'<td class="r" style="color:#e8a020">'+(cv.rpm?'$'+cv.rpm.toFixed(2)+'/mi':'—')+'</td>'
+      +'</tr>';
   }
 
   // Build weekly table
@@ -492,6 +525,8 @@ function generate(){
     +'<div class="footnote">Est. Miles = straight-line × 1.2 driving factor · '+milesCalcPct+'% of loads matched · RPM excludes '+rpmExcluded+' loads under '+minMiles+' mi · Canceled/Draft excluded</div>';
 
   document.getElementById('tbarInfo').textContent=period+' · '+totLoads+' loads · '+fmt(totRev);
+  attachSort('custTable', custData, 'revenue', false, renderCustRow);
+  attachSort('carrTable', carrData, 'pay', false, renderCarrRow);
   document.getElementById('setup').style.display='none';
   document.getElementById('summary').style.display='block';
 }
