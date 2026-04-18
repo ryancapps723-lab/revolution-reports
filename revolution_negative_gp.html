@@ -170,7 +170,7 @@ document.getElementById("fileInput").addEventListener("change", function() {
   reader.onload = function(e) {
     try {
       var wb = XLSX.read(e.target.result, {type: "array", cellDates: true});
-      parsedRows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {raw: false, defval: ""});
+      parsedRows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {raw: true, defval: ""});
       var fs = document.getElementById("fileStatus");
       fs.style.display = "block";
       fs.textContent = "checkmark " + file.name + " - " + parsedRows.length + " rows loaded";
@@ -197,15 +197,15 @@ function generate() {
   parsedRows.forEach(function(row) {
     var gpRaw = row["Gross Profit/Loss"];
     if (gpRaw === undefined || gpRaw === "" || gpRaw === null) return;
-    var gp = parseFloat(String(gpRaw).replace(/[$,]/g, ""));
+    var gp = typeof gpRaw === "number" ? gpRaw : parseFloat(String(gpRaw).replace(/[^0-9.-]/g, ""));
     if (isNaN(gp) || gp >= 0) return;
 
     var driver   = gs(row, ["Drivers", "Driver", "Driver Name"]);
     var customer = gs(row, ["Customer", "Bill To", "Customer Name"]);
     var loadId   = gs(row, ["Load ID", "Load #", "Load"]);
-    var revenue  = parseFloat(String(row["Total Income"] || "0").replace(/[$,]/g, "")) || 0;
-    var expenses = parseFloat(String(row["Total Expenses"] || "0").replace(/[$,]/g, "")) || 0;
-    var miles    = parseFloat(String(row["Client Mileage"] || row["Carrier Mileage"] || "0").replace(/[^0-9.]/g, "")) || 0;
+    var revRaw = row["Total Income"] || 0; var revenue = typeof revRaw === "number" ? revRaw : parseFloat(String(revRaw).replace(/[^0-9.]/g,"")) || 0;
+    var expRaw = row["Total Expenses"] || 0; var expenses = typeof expRaw === "number" ? expRaw : parseFloat(String(expRaw).replace(/[^0-9.]/g,"")) || 0;
+    var milesRaw = row["Client Mileage"] || row["Carrier Mileage"] || 0; var miles = typeof milesRaw === "number" ? milesRaw : parseFloat(String(milesRaw).replace(/[^0-9.]/g, "")) || 0;
     var date     = gs(row, ["First Pick Date", "Pickup Date", "Pick Date", "Date"]);
     if (date && date.length > 10) date = date.substring(0, 10);
 
