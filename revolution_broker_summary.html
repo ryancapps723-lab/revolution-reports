@@ -8,26 +8,39 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--navy:#0d1b2e;--navy2:#081220;--red:#cc1e2b;--white:#ffffff;--gray:#d0d4da;--muted:rgba(255,255,255,.45);--gold:#e8a020;--green:#4ade80;--red2:#f87171;--border:rgba(255,255,255,.1);--card:rgba(255,255,255,.04)}
+:root{
+  --navy:#0d1b2e;--navy2:#081220;--red:#cc1e2b;--white:#ffffff;
+  --gray:#d0d4da;--muted:rgba(255,255,255,.45);--gold:#e8a020;
+  --green:#4ade80;--border:rgba(255,255,255,.1);--card:rgba(255,255,255,.04);
+}
 body{font-family:'Barlow',sans-serif;background:var(--navy2);color:var(--white);min-height:100vh}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(204,30,43,.08) 0%,transparent 65%);pointer-events:none}
-.rev-nav-btn{position:fixed;top:14px;left:14px;z-index:99999;background:rgba(13,27,46,.95);border:1px solid rgba(255,255,255,.25);border-radius:8px;width:40px;height:40px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;padding:0}
-.rev-nav-btn span{display:block;width:18px;height:2px;background:#fff;border-radius:2px}
-.rev-nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9998;opacity:0;pointer-events:none;transition:opacity .3s}
-.rev-nav-overlay.open{opacity:1;pointer-events:all}
-.rev-nav-sidebar{position:fixed;top:0;left:0;width:270px;height:100%;background:#070f1a;border-right:1px solid rgba(255,255,255,.1);z-index:9999;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding-bottom:24px;overflow-y:auto}
-.rev-nav-sidebar.open{transform:translateX(0)}
-.rev-nav-head{padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:12px;margin-bottom:6px}
-.rev-nav-head img{width:38px;height:38px;border-radius:8px}
-.rev-nav-head .t{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:#fff}
-.rev-nav-head .s{font-size:9px;color:rgba(255,255,255,.45);letter-spacing:.07em;text-transform:uppercase;margin-top:1px}
-.rev-nav-section{padding:10px 14px 2px}
-.rev-nav-lbl{font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.45);padding:0 6px;margin-bottom:3px}
-.rev-nav-link{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;text-decoration:none;color:#d0d4da;font-size:13px;font-weight:500;transition:background .15s,color .15s;margin-bottom:1px}
-.rev-nav-link:hover{background:rgba(255,255,255,.07);color:#fff}
-.rev-nav-link.active{background:rgba(204,30,43,.12);color:#fff;border-left:3px solid #cc1e2b;padding-left:7px}
-.rev-nav-link .ic{font-size:14px;width:18px;text-align:center}
-.rev-nav-div{height:1px;background:rgba(255,255,255,.1);margin:8px 14px}
+
+/* ── Nav ── */
+.nav-btn{position:fixed;top:18px;left:18px;z-index:1000;background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:8px;width:42px;height:42px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:background .2s}
+.nav-btn:hover{background:rgba(255,255,255,.13)}
+.nav-btn span{display:block;width:18px;height:2px;background:var(--white);border-radius:2px;transition:all .25s cubic-bezier(.4,0,.2,1)}
+.nav-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.nav-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:998;opacity:0;pointer-events:none;transition:opacity .3s}
+.overlay.open{opacity:1;pointer-events:all}
+.sidebar{position:fixed;top:0;left:0;width:270px;height:100%;background:#070f1a;border-right:1px solid var(--border);z-index:999;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;padding-bottom:24px;overflow-y:auto}
+.sidebar.open{transform:translateX(0)}
+.sb-head{padding:20px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.sb-head img{width:38px;height:38px;border-radius:8px;flex-shrink:0}
+.sb-head-text .t{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase}
+.sb-head-text .s{font-size:9px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;margin-top:1px}
+.sb-section{padding:10px 14px 2px}
+.sb-label{font-size:8.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);padding:0 6px;margin-bottom:3px}
+.sb-link{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;text-decoration:none;color:var(--gray);font-size:13px;font-weight:500;transition:background .15s,color .15s;margin-bottom:1px}
+.sb-link:hover{background:rgba(255,255,255,.07);color:var(--white)}
+.sb-link.active{background:rgba(204,30,43,.12);color:var(--white);border-left:3px solid var(--red);padding-left:7px}
+.sb-link .ic{font-size:14px;width:18px;text-align:center}
+.sb-link .soon{margin-left:auto;font-size:7.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(232,160,32,.12);color:var(--gold);border:1px solid rgba(232,160,32,.25);border-radius:3px;padding:2px 5px}
+.sb-div{height:1px;background:var(--border);margin:8px 14px}
+
+/* ── Setup ── */
 #setup{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:60px 20px 40px;gap:20px}
 .setup-brand{display:flex;align-items:center;gap:12px;margin-bottom:8px}
 .setup-brand img{width:44px;height:44px;border-radius:10px}
@@ -35,518 +48,409 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .setup-brand-text .n span{color:var(--red)}
 .setup-brand-text .s{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
 .setup-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;width:100%;max-width:520px;display:flex;flex-direction:column;gap:16px}
-.setup-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:12px}
+.setup-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;letter-spacing:.08em;text-transform:uppercase;color:var(--white);border-bottom:1px solid var(--border);padding-bottom:12px}
 .field{display:flex;flex-direction:column;gap:5px}
 .field label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--gray);font-weight:600}
-.field input{background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:6px;padding:8px 11px;color:#fff;font-size:13px;font-family:'Barlow',sans-serif;outline:none;width:100%}
+.field input{background:rgba(255,255,255,.07);border:1px solid var(--border);border-radius:6px;padding:8px 11px;color:var(--white);font-size:13px;font-family:'Barlow',sans-serif;outline:none;width:100%}
 .field input:focus{border-color:var(--red)}
 .upload-zone{border:2px dashed rgba(255,255,255,.2);border-radius:8px;padding:24px;text-align:center;cursor:pointer;background:rgba(255,255,255,.02);transition:all .2s}
 .upload-zone:hover{border-color:var(--red);background:rgba(204,30,43,.05)}
 .upload-zone.has-file{border-color:#22c55e;border-style:solid;background:rgba(34,197,94,.04)}
 .uz-icon{font-size:24px;margin-bottom:8px}
 .uz-text{font-size:13px;color:var(--gray)}
-.uz-file{font-size:11px;color:#22c55e;font-weight:600;margin-top:4px;display:none}
+.uz-file{font-size:11px;color:#22c55e;font-weight:600;margin-top:4px}
 .uz-hint{font-size:9px;color:#6b7280;margin-top:2px}
-.btn-generate{background:var(--red);color:#fff;border:none;border-radius:8px;padding:12px 32px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .2s;width:100%}
+.btn-generate{background:var(--red);color:var(--white);border:none;border-radius:8px;padding:12px 32px;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .2s;width:100%}
 .btn-generate:hover{background:#e8232f}
 .err{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.3);border-radius:6px;padding:10px 14px;font-size:12px;color:#f87171;display:none}
-#summary{display:none;padding:60px 24px 40px;max-width:1300px;margin:0 auto}
-.toolbar{position:fixed;top:0;left:0;right:0;background:rgba(8,18,32,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:10px 70px;display:flex;align-items:center;justify-content:space-between;z-index:200}
-.toolbar-info{font-size:11px;color:var(--muted)}
-.btn-back{background:rgba(255,255,255,.08);border:1px solid var(--border);color:var(--gray);padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Barlow',sans-serif}
-.btn-print{background:var(--red);border:none;color:#fff;padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-.rpt-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:2px solid var(--red);margin-bottom:20px}
-.rpt-brand{background:#fff;color:var(--navy);font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;padding:5px 10px;border-radius:5px;letter-spacing:.06em}
+
+/* ── Summary ── */
+#summary{display:none;padding:60px 24px 40px;max-width:1200px;margin:0 auto}
+.toolbar{position:fixed;top:0;left:0;right:0;background:rgba(8,18,32,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:10px 70px 10px 70px;display:flex;align-items:center;justify-content:space-between;z-index:100}
+.toolbar-info{font-size:11px;color:var(--muted);letter-spacing:.04em}
+.btn-back{background:rgba(255,255,255,.08);border:1px solid var(--border);color:var(--gray);padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Barlow',sans-serif;transition:background .15s}
+.btn-back:hover{background:rgba(255,255,255,.14)}
+.btn-print{background:var(--red);border:none;color:var(--white);padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+
+/* ── Report header ── */
+.rpt-header{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:2px solid var(--red);margin-bottom:16px}
+.rpt-header-left{display:flex;align-items:center;gap:14px}
+.rpt-brand{background:var(--white);color:var(--navy);font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:16px;padding:5px 10px;border-radius:5px;letter-spacing:.06em}
 .rpt-title h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;letter-spacing:.06em;text-transform:uppercase}
 .rpt-title p{font-size:9px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:2px}
-.ctag{background:var(--red);color:#fff;font-size:7px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:3px}
-.kpibar{display:grid;gap:6px;margin-bottom:20px}
+.rpt-right{display:flex;align-items:center;gap:10px}
+.period-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.ctag{background:var(--red);color:var(--white);font-size:7px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:3px}
+
+/* ── KPI bar ── */
+.kpibar{display:grid;gap:6px;margin-bottom:14px}
 .kpi{background:var(--card);border:1px solid var(--border);border-radius:5px;padding:6px 10px;text-align:center}
 .kpi.hl{background:var(--red);border-color:var(--red)}
 .kpi.hl2{background:rgba(232,160,32,.12);border-color:rgba(232,160,32,.3)}
 .kpi.hl3{background:rgba(74,222,128,.08);border-color:rgba(74,222,128,.2)}
 .kl{font-size:7px;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.6);display:block;font-weight:600;margin-bottom:2px}
-.kv{font-weight:800;font-size:15px;line-height:1;color:#fff}
+.kv{font-weight:800;font-size:15px;line-height:1;color:var(--white)}
 .kpi.hl2 .kv{color:var(--gold)}
 .kpi.hl3 .kv{color:var(--green)}
-.section-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.section-title span{font-size:9px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:.04em}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-.data-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.data-table thead tr{background:rgba(255,255,255,.06)}
-.data-table th{padding:8px 12px;font-size:7.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;text-align:left;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap}
-.data-table th:hover{color:#fff;background:rgba(255,255,255,.06)}
+
+/* ── Tables ── */
+.section-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.section-title span{font-size:9px;font-weight:400;color:var(--muted);letter-spacing:.04em;text-transform:none}
+.data-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px}
+.data-table thead tr{background:rgba(255,255,255,.05)}
+.data-table th{padding:8px 12px;font-size:7.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;text-align:left;border-bottom:1px solid var(--border)}
 .data-table th.r{text-align:right}
-.sort-asc::after{content:" ↑";color:var(--gold)}
-.sort-desc::after{content:" ↓";color:var(--gold)}
-.sort-none::after{content:" ↕";color:rgba(255,255,255,.2)}
+.data-table th.sortable{cursor:pointer;user-select:none}
+.data-table th.sortable:hover{color:var(--white);background:rgba(255,255,255,.08)}
+.data-table th.sort-asc::after{content:' ↑';color:var(--gold)}
+.data-table th.sort-desc::after{content:' ↓';color:var(--gold)}
 .data-table td{padding:7px 12px;font-size:9px;border-bottom:.5px solid rgba(255,255,255,.05);color:var(--gray)}
+.data-table td.name{font-weight:600;color:var(--white);max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .data-table td.r{text-align:right}
-.data-table td.name{font-weight:600;color:#fff;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.data-table td.rev{font-weight:700;color:var(--white);text-align:right}
+.data-table td.net{font-weight:700;text-align:right}
+.data-table td.gp{font-weight:700;text-align:right}
 .data-table tr:last-child td{border-bottom:none}
 .data-table tr:hover td{background:rgba(255,255,255,.03)}
 .gp-bar-wrap{display:flex;align-items:center;gap:6px}
 .gp-bar{background:rgba(255,255,255,.08);border-radius:2px;height:4px;flex:1;overflow:hidden}
 .gp-bar-fill{height:100%;border-radius:2px}
-.weekly-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:20px}
-.weekly-table thead tr{background:rgba(255,255,255,.06)}
-.weekly-table th{padding:8px 12px;font-size:7.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:700;text-align:right;border-bottom:1px solid var(--border);white-space:nowrap}
-.weekly-table th:first-child{text-align:left}
-.weekly-table td{padding:7px 12px;font-size:9px;border-bottom:.5px solid rgba(255,255,255,.05);text-align:right;color:var(--gray)}
-.weekly-table td:first-child{text-align:left;font-weight:700;color:var(--gold)}
-.weekly-table tr:last-child td{border-bottom:none}
-.weekly-table tr.total-row td{background:rgba(255,255,255,.06);font-weight:700;border-top:1px solid rgba(255,255,255,.15);color:#fff}
-.footnote{font-size:9px;color:var(--muted);margin-top:4px;padding:0 4px}
-@media print{.toolbar,.rev-nav-btn,.rev-nav-overlay,.rev-nav-sidebar{display:none!important}body{-webkit-print-color-adjust:exact;print-color-adjust:exact}#summary{padding:20px}}
+
+@media print{
+  .toolbar,.nav-btn,.overlay,.sidebar{display:none}
+  body{background:var(--navy2);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #summary{padding:20px}
+}
 </style>
 </head>
 <body>
-<button class="rev-nav-btn" id="revNavBtn"><span></span><span></span><span></span></button>
-<div class="rev-nav-overlay" id="revNavOverlay"></div>
-<div class="rev-nav-sidebar" id="revNavSidebar">
-  <div class="rev-nav-head"><img src="data:image/jpeg;base64,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" alt="RT"><div><div class="t">Revolution Ops</div><div class="s">Operations Dashboard</div></div></div>
-  <div class="rev-nav-section"><div class="rev-nav-lbl">Trucking</div>
-    <a class="rev-nav-link" href="revolution_3driver_summary.html"><span class="ic">📋</span>Regulated Fleet</a>
-    <a class="rev-nav-link" href="revolution_unregulated_summary.html"><span class="ic">🚚</span>Unregulated Fleet</a>
-    <a class="rev-nav-link" href="revolution_wow_comparison.html"><span class="ic">📊</span>Week over Week</a>
+
+<!-- Nav button -->
+<button class="nav-btn" id="navBtn" onclick="toggleNav()">
+  <span></span><span></span><span></span>
+</button>
+
+<!-- Overlay + Sidebar -->
+<div class="overlay" id="overlay" onclick="closeNav()"></div>
+<div class="sidebar" id="sidebar">
+  <div class="sb-head">
+    <img src="data:image/jpeg;base64,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" alt="RT">
+    <div class="sb-head-text">
+      <div class="t">Revolution Ops</div>
+      <div class="s">Operations Dashboard</div>
+    </div>
   </div>
-  <div class="rev-nav-div"></div>
-  <div class="rev-nav-section"><div class="rev-nav-lbl">Transport</div>
-    <a class="rev-nav-link active" href="revolution_broker_summary.html"><span class="ic">📦</span>Broker Summary</a>
-    <a class="rev-nav-link" href="revolution_broker_wow.html"><span class="ic">📈</span>Week over Week</a>
+  <div class="sb-section">
+    <div class="sb-label">🚛 Trucking</div>
+    <a class="sb-link" href="revolution_3driver_summary.html"><span class="ic">📋</span>Regulated Fleet</a>
+    <a class="sb-link" href="revolution_unregulated_summary.html"><span class="ic">🚚</span>Unregulated Fleet</a>
+    <a class="sb-link" href="revolution_wow_comparison.html"><span class="ic">📊</span>Week over Week</a>
+    <a class="sb-link" href="revolution_negative_gp.html"><span class="ic">🔴</span>Negative GP</a>
+  </div>
+  <div class="sb-div"></div>
+  <div class="sb-section">
+    <div class="sb-label">🔁 Transport</div>
+    <a class="sb-link active" href="revolution_broker_summary.html"><span class="ic">📦</span>Broker Summary</a>
+    <a class="sb-link" href="#"><span class="ic">📈</span>Week over Week<span class="soon">Soon</span></a>
   </div>
 </div>
+
+<!-- Setup -->
 <div id="setup">
   <div class="setup-brand">
     <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQEBIQEBAPDhANEA8QEA4NEA8ODRANFREiFhURExMYHSggGBoxGxMTITEtMSkuLi4uFx9LOjUtNzQtLisBCgoKDg0OFxAQGC0dHyUtLS0rLSsrLS0tLS0tKy0tLS0tLS0rLS0rNy0tLS0tNzcrLSsrNy0tKysrLSstKysrLf/AABEIALQAtAMBEQACEQEDEQH/xAAcAAEBAAIDAQEAAAAAAAAAAAAABgQFAQIDBwj/xAA+EAACAQIBBwoDCAEDBQAAAAAAAQIDBBEFBhIWNFKyITFBVHN0kpPR0hNxkQciMkJRU2GBchShwhUjYoLB/8QAGwEBAAIDAQEAAAAAAAAAAAAAAAECAwQGBQf/xAApEQEAAgIBBAIBBQADAQAAAAAAAQIDEQQFEiExE1FBBhQVFiIyUmFC/9oADAMBAAIRAxEAPwCg+0/7RJ2c/wDR2mj8bRxq1mtL4WPMkv1NjDh3DBe75PVzqyhOWlK9um3z4VZr/ZM2q44hh7nTWW/67dedP1J7IV2ay3/Xbrzp+o7INmst/wBduvOn6jsg2ay3/Xbrzp+o7INmst/12686fqOyDZrLf9duvOn6jsg2ay3/AF2686fqOyDZrLf9duvOn6jsg2ay3/Xbrzp+o7INmst/12686fqOyDZrLf8AXbrzp+o7INmst/12686fqOyDZrLf9duvOn6jsg2ay3/Xbrzp+o7INmst/wBduvOn6jsg2ay3/Xbrzp+o7INmst/12686fqOyDZrLf9duvOn6jsNmst/12686fqOyCLy22QftCyjaTUvjzuKaf3qVxKVRSj/EnypmO2GJZIyS+/5u5apX1tTuaWDjUXKpfihNc8H8jTtTU6bEXfm3PGq55QvJSeLdzVWPym0b+Ouoatpact52oE6NA0aBo0DRoGjQNGgaNA0aBo0DRoGjQNGgaNA0aBo0DRoGjQNGgiYlPgJg2+l/ZtlGrTtJxjNpK4qcn/pEx2jyvEonOzb7vvVfjZanpWWqLQrAAAAAAAAAAAAAAAAAAAAAAAAvswNll28+CJjn2uls7Nvu+9V+NlqekS1RaFYAAAAAAAAAAAAAAAAAAAAAAAF9mBssu3nwRMc+10tnZt933qvxstT0iWqLQrAAAAAAAAAAAAAAAAAAAAAAAAvswNll28+CJjn2uls7Nvu+9V+NlqekS1RaFYAAAAAAAAAAAAAAAAAAAAAAAF9mBssu3nwRMc+10tnZt933qvxstT0iWqLQrAAAAAAAAAAAAAAAAAAAAAAAAvswNll28+CJjn2uls7Nvu+9V+NlqekS1RaFYAAAAAAAAAAAAAAAnQEAAAAAAAL7MDZZdvPgiY59rpbOzb7vvVfjZanpEtUWhWAAAAAB4hMf+BHlEeXtbWs6jwgsX0voRr5uVWkN7icHJyrarDc08344fem9Lp0VyHl36p58Onw/pn/P+5d9X6e/L6RMf8pdm/rOP7NXqe/L6RJ/lbn9ax/Zq/T35fSJH8raPwf1rHH5dJ5vw6Kkl80Xr1WZ/DHf9MxPqWDeZIqU1pLCcVzuPOv6N3F1CmT/AD6ePzOh58FfHlkWGRo1KcZylJOWLwX6GvyepTintjy3+D0CM2Luv4lk6v09+X0ia0dWv+W7/W8cfk1fp78vpEn+Wn6P61in8uNX6e/L6RH8taPwf1qkflzq/Dfl9Ik/ysz+D+tYvzLU5UtY0p6EW3yYvE9XiZpy025nqfCrx8vZDDNqLbjTyo8eF9mBssu3nwRKT7XhLZ2bfd96r8bLU9Ilqi0KwAAAAGts60sIzjpzqRpqTaipc7NHPyLRPiHscTp1b13e/ayaeTaGK0riMl0xTisTXycrP2+Iehg6XxYv5vtuI1aFL7ilCGH5cYo8u1c+R0+LPxeLHbHh2/19H9yH1iYf2eX3pljqWH/syISTWK5U+VNdJhmJhvY8kXjcOcCsbmV7W1G2DPK1FNpz5YvB8jN2vDvaN6eRk61xqTqbPa2vadT8MlJro6TFl418f4bPH5+LP4pZkfyYIn8w3LVi0ds+WLWvaVL7kpKGCxSw/KbOPjXyf6jy8/Nz8HF/zedOtPKdGTUVNNyeCWEicvDy0jcwpi6txstorWWWjV9e4ervcbh4XN/TpvCckm1ikbGPj2yeoedyeo4cE6vLxWVqH7i+jM38df6a1+ucWa/8k3f1/iVZz51J8n+J0PExfFj04TqXInPmmzHNjxEbefH2vswNll28+CJjn2vCWzs2+771X42Wp6RLVFoVgE+ZRM69AtMVX7Zn0FYtEp7Lw7QjpNRXK5NJFL5O2GTBgva0MjKM1p6C/DSioL/7/uYuPWLV3Zt861u6K19QZMpKVRY/hgnOX+KI5MxWvhk6fim2TumfDxuKunOU3zyk2Xx6q1uXkyZMu4cUaenKMVzyaQzXitZlbjYcmTLETK0pU1FKK/KsEcllybtL6dx6fFiirpc1dGE5bqbMmGkTMbU515phnSLbxeP6vFnV0nHFYfL81b2vMxEtnkK2k6ing1GHPJ9P8Ghz8tJpqHudC4uec8X9QpznJiItqHfeYS+cE062HPoxUX8zpuBTtrt87/UGWLcjUSZv0dKtj0Qi5f3zDqOSIppb9P8AHm+fv+lQc1E78PoM21CRyxW060+nReiv6Oo4OLtxvmnWc/fypYZva8PI3OgICRfZgbLLt58ETHPteEtnZt933qvxstT0iWqLQqEwem4yDYRnjUmk4r7qT5nLePH5/KmviHVdE6bGX/Vo8Nx/0+j+3D6HkRzMsOp/isH/AFdo2NKLxjCKa5U0uYieVlstTp3Hp+HDsaX7cG3/AAWnlZYjwT07jWnzDtCzprHCEUmsHgudGP8Ac5JjcytTp+CkTEQ6/wCgo/tw+haOZkspHS+P/wBXanaU4tOMIprmaRW3JyX8L4+nYaW7oh7mGW9EfhxJJpppPHoZNZn8K3pFo1Lp8GO7HwovGbJ3a2168TDWf+Lulh+mBWbXvbTN20x13Hhrso5VhTTUXpT6Evwr5nocXgTe25eF1HrFcVZpE+UzObbbfK28WzoqUildOAy5pzWm0+1Bm3SwhKe9LBfJHgdUyf707f8ATXH7cU2ltbipoxlLojFs8/BTd4e/y8sY8NpRLli8f1eJ19I7aQ+Vci/yZJs4L/8AywgAC+zA2WXbz4ImOfa6Wzs2+771X42Wp6RLVFoVetrbTqS0YLF87/iJhz54w0mW7wuJfkXikQsLWgqcIwX5Vh82cnmy/JebPpnC48YMUVhxd3MaUdKXMuZLnbJw4pvOoOZzacak2sn62WK039zGP6RgsZHtU4OPHXcuMydZ5We8/FHh1p5Vr039/F/+M1hiW/Z4svpFOrcrBbeSPDfWF7GtHFcjXJKL50eNyeLOG/8A463p3Uacqu49so1fD1PANI8GJH+teUtJlnKc6dTRg0sI4yxWPKe3w+HW9Ny5HrHVsmDL2Uln5Ju/i003hpLkl/kaXLwfFZ6/Sub+5xb/AC9ryjpwlHlTa5Gn0mLjXit9y2OfjtkxTWEZKODwfI08GdZhtFq7h8v5EWpkmLOC1p1G2PHXflZZOo6FKEf0ji/mzkuZk7sr6h0zFOPj1hi5fraNHDpnJR/o2enYt5NtD9QZ/jw6+0udK+eTOwlAAAvswNll28+CJjn2uls7Nvu+9V+NlqekS1RKsKTIVGMKek3FSqcrxfNHoPA6he157Yd50GmLFi7pny2fxI70fFE8z4LRGtPfjl4/tO5w19KooppqMeTB8mkz3unYopTdocZ1zlRlzRSJ8Nxk6hTpQSTji1jJ4x0nI87lXy5LzEenv9OpxsOGPW3rdU6dSLjJxeK5HjHkMWH5qWiWXl142akxOk7kqp8Ovo4rBtxbx5Gexy8fy4d/lynTc1ePy5rHpUfFjvR+sTn/AILfTuo5mLXtx8WO9H6xHw3+k/vMP2OrHej9Yl64bz7hW3LwxWZ7kff1tOrOXQ3yfI6bi4opjh816lmjPmm9WZkG60Kmi+SNRYcvRI1ufx/kpuHo9B53w5eyfUqV1Y70frE5/wCC8fh3P7rHvUymsvUEqmnFpqosXg+ZnRcC0/H5cJ1zDSuTvqwrKnpVIR5Fi1jjum1yJn4vDzen0i+eIn0sVVjvR8UTlL4Lzben0zHyccViNp/OOvpTjFNNRji8H0s9zp2Ga+Zcf+oeXGS8ViWoPWcsAAAF9mBssu3nwRMc+10tnZt933qvxstT0iWqLQrAVmlZ/DJGW8epCOyv0n5r/YWiIUm0zO5CvZX6W+a/2Dsr9HzX+wtqFO6d7CvZX6ZPmv8AYOyv0fNf7B2V+kfNf7CzGDSYmY8wFeyv0yfNf7C0ViPStr2t7kExtWJmPMBXsr9MnzX+wtERHpS1pt7CVQAAAvswNll28+CJjn2uls7Nvu+9V+NlqekS1RaFYAAAAAAAAAAAAAAAAAAAAAAAF9mBssu3nwRMc+10tnZt933qvxstT0iWqLQrAAAAAAAAAAAAAAAAAAAAAAAAvswNll28+CJjn2uls7Nvu+9V+NlqekS1RaFYAAAAAAAAAAAAAAAAAAAAAAAF9mBssu3nwRMc+10tnZt933qvxstT0iWqLQrAAAAAAAAAAAAAAAAAAAAAAAAvswNll28+CJjn2uls7Nvu+9V+NlqelZaotCAAAAAAAAAAAAAAAAAAAAAAABfZgbLLt58ETHPteEtnXt933qvxstT0rePLVExJPoJQAAAAAAAAAAAAAAAAAAAAAAX2YGyy7efBEpMeUw1n2m5FnaZRr6Sap3M3WpS/LJTli4/NMphvuGTJHlKGXTHPoJQAAAAAAAAAAAAAAAAAAAAAETKdPuf2ZZn4ZPhO4jhOvOVVRkvvRptJRT8OP9mrbL5Za08LfL+Qba+pfCuaaqRwxT5pwl+sZdBr1mYZ7Q+P5VzBtKVWUYzuME+TGcH/AMTfifDVsxdSLXfuPHD2kqmpFrv3Hjh7RsNSLXfuPHD2jYakWu/ceOHtGw1Itd+48cPaNhqRa79x44e0bDUi137jxw9o2GpFrv3Hjh7RsNSLXfuPHD2jYakWu/ceOHtGw1Itd+48cPaNhqRa79x44e0bDUi137jxw9o2GpFrv3Hjh7RsNSLXfuPHD2jYakWu/ceOHtGw1Itd+48cPaNhqRa79x44e0bDUi137jxw9pYlZZlfZ7YR/wC/OFSvODxiq8oypqX66KSx/s1c1phnxw+nJYGqzv/Z" alt="RT">
-    <div class="setup-brand-text"><div class="n">Revolution <span>Transport</span></div><div class="s">Broker Operations Summary</div></div>
-  </div>
-  <div class="setup-card">
-    <div class="setup-title">Upload Turvo Shipment Summary</div>
-    <div class="field"><label>Period Label</label><input type="text" id="periodLabel" placeholder="e.g. Q1 2026 · Jan–Mar"></div>
-    <div class="field"><label>Min Miles for RPM (exclude short hauls)</label><input type="number" id="minMiles" value="200" min="0" max="9999" placeholder="200"></div>
-    <div class="upload-zone" id="uploadZone">
-      <div class="uz-icon">📂</div>
-      <div class="uz-text"><strong>Click to upload</strong> Turvo Shipment Summary (.xls / .xlsx)</div>
-      <div id="fileStatus" class="uz-file"></div>
-      <div class="uz-hint">Turvo → Reports → Shipments → Shipment Summary</div>
-      <input type="file" id="fileInput" accept=".xls,.xlsx" style="display:none">
+    <div class="setup-brand-text">
+      <div class="n">Revolution <span>Transport</span></div>
+      <div class="s">Broker Operations Summary</div>
     </div>
+  </div>
+
+  <div class="setup-card">
+    <div class="setup-title">Upload Turvo Customer Summary Report</div>
+
+    <div class="field">
+      <label>Period Label</label>
+      <input type="text" id="periodLabel" placeholder="e.g. Mar 2026 · Q1">
+    </div>
+
+    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+      <div class="uz-icon">📂</div>
+      <div class="uz-text"><strong>Click to upload</strong> Turvo Customer Summary (.xls / .xlsx)</div>
+      <div id="fileStatus" class="uz-file" style="display:none"></div>
+      <div class="uz-hint">Export from Turvo → Reports → Customers → Customer Summary</div>
+    </div>
+    <input type="file" id="fileInput" accept=".xls,.xlsx" style="display:none" onchange="handleFile(this)">
+
     <div class="err" id="errMsg"></div>
-    <button class="btn-generate" id="genBtn">Generate Summary</button>
+    <button class="btn-generate" onclick="generate()">Generate Summary</button>
   </div>
 </div>
+
+<!-- Summary -->
 <div id="summary">
   <div class="toolbar">
-    <button class="btn-back" id="backBtn">← New Report</button>
+    <button class="btn-back" onclick="goBack()">← New Report</button>
     <div class="toolbar-info" id="tbarInfo"></div>
     <button class="btn-print" onclick="window.print()">🖨 Print / Save PDF</button>
   </div>
+
   <div id="pageOut"></div>
 </div>
+
 <script>
+let parsedRows = null;
 
-var CITY_COORDS = {
-  "NEW YORK":{"lat":40.7128,"lng":-74.0060},"LOS ANGELES":{"lat":34.0522,"lng":-118.2437},
-  "CHICAGO":{"lat":41.8781,"lng":-87.6298},"HOUSTON":{"lat":29.7604,"lng":-95.3698},
-  "PHOENIX":{"lat":33.4484,"lng":-112.0740},"PHILADELPHIA":{"lat":39.9526,"lng":-75.1652},
-  "SAN ANTONIO":{"lat":29.4241,"lng":-98.4936},"SAN DIEGO":{"lat":32.7157,"lng":-117.1611},
-  "DALLAS":{"lat":32.7767,"lng":-96.7970},"SAN JOSE":{"lat":37.3382,"lng":-121.8863},
-  "AUSTIN":{"lat":30.2672,"lng":-97.7431},"JACKSONVILLE":{"lat":30.3322,"lng":-81.6557},
-  "FORT WORTH":{"lat":32.7555,"lng":-97.3308},"COLUMBUS":{"lat":39.9612,"lng":-82.9988},
-  "CHARLOTTE":{"lat":35.2271,"lng":-80.8431},"INDIANAPOLIS":{"lat":39.7684,"lng":-86.1581},
-  "SAN FRANCISCO":{"lat":37.7749,"lng":-122.4194},"SEATTLE":{"lat":47.6062,"lng":-122.3321},
-  "DENVER":{"lat":39.7392,"lng":-104.9903},"NASHVILLE":{"lat":36.1627,"lng":-86.7816},
-  "OKLAHOMA CITY":{"lat":35.4676,"lng":-97.5164},"EL PASO":{"lat":31.7619,"lng":-106.4850},
-  "WASHINGTON":{"lat":38.9072,"lng":-77.0369},"BOSTON":{"lat":42.3601,"lng":-71.0589},
-  "LAS VEGAS":{"lat":36.1699,"lng":-115.1398},"MEMPHIS":{"lat":35.1495,"lng":-90.0490},
-  "LOUISVILLE":{"lat":38.2527,"lng":-85.7585},"PORTLAND":{"lat":45.5051,"lng":-122.6750},
-  "BALTIMORE":{"lat":39.2904,"lng":-76.6122},"MILWAUKEE":{"lat":43.0389,"lng":-87.9065},
-  "ALBUQUERQUE":{"lat":35.0844,"lng":-106.6504},"TUCSON":{"lat":32.2226,"lng":-110.9747},
-  "FRESNO":{"lat":36.7378,"lng":-119.7871},"MESA":{"lat":33.4152,"lng":-111.8315},
-  "SACRAMENTO":{"lat":38.5816,"lng":-121.4944},"ATLANTA":{"lat":33.7490,"lng":-84.3880},
-  "KANSAS CITY":{"lat":39.0997,"lng":-94.5786},"OMAHA":{"lat":41.2565,"lng":-95.9345},
-  "RALEIGH":{"lat":35.7796,"lng":-78.6382},"MIAMI":{"lat":25.7617,"lng":-80.1918},
-  "MINNEAPOLIS":{"lat":44.9778,"lng":-93.2650},"CLEVELAND":{"lat":41.4993,"lng":-81.6944},
-  "WICHITA":{"lat":37.6872,"lng":-97.3301},"ARLINGTON":{"lat":32.7357,"lng":-97.1081},
-  "NEW ORLEANS":{"lat":29.9511,"lng":-90.0715},"TAMPA":{"lat":27.9506,"lng":-82.4572},
-  "AURORA":{"lat":39.7294,"lng":-104.8319},"ANAHEIM":{"lat":33.8366,"lng":-117.9143},
-  "SANTA ANA":{"lat":33.7455,"lng":-117.8677},"CORPUS CHRISTI":{"lat":27.8006,"lng":-97.3964},
-  "RIVERSIDE":{"lat":33.9806,"lng":-117.3755},"ST LOUIS":{"lat":38.6270,"lng":-90.1994},
-  "SAINT LOUIS":{"lat":38.6270,"lng":-90.1994},"PITTSBURGH":{"lat":40.4406,"lng":-79.9959},
-  "LEXINGTON":{"lat":38.0406,"lng":-84.5037},"ANCHORAGE":{"lat":61.2181,"lng":-149.9003},
-  "STOCKTON":{"lat":37.9577,"lng":-121.2908},"CINCINNATI":{"lat":39.1031,"lng":-84.5120},
-  "ST PAUL":{"lat":44.9537,"lng":-93.0900},"GREENSBORO":{"lat":36.0726,"lng":-79.7920},
-  "TOLEDO":{"lat":41.6528,"lng":-83.5379},"NEWARK":{"lat":40.7357,"lng":-74.1724},
-  "PLANO":{"lat":33.0198,"lng":-96.6989},"HENDERSON":{"lat":36.0395,"lng":-114.9817},
-  "ORLANDO":{"lat":28.5383,"lng":-81.3792},"CHANDLER":{"lat":33.3062,"lng":-111.8413},
-  "ST PETERSBURG":{"lat":27.7676,"lng":-82.6403},"LAREDO":{"lat":27.5306,"lng":-99.4803},
-  "NORFOLK":{"lat":36.8508,"lng":-76.2859},"MADISON":{"lat":43.0731,"lng":-89.4012},
-  "DURHAM":{"lat":35.9940,"lng":-78.8986},"LUBBOCK":{"lat":33.5779,"lng":-101.8552},
-  "WINSTON-SALEM":{"lat":36.0999,"lng":-80.2442},"GARLAND":{"lat":32.9126,"lng":-96.6389},
-  "GLENDALE":{"lat":33.5387,"lng":-112.1860},"HIALEAH":{"lat":25.8576,"lng":-80.2781},
-  "RENO":{"lat":39.5296,"lng":-119.8138},"BATON ROUGE":{"lat":30.4515,"lng":-91.1871},
-  "IRVINE":{"lat":33.6846,"lng":-117.8265},"CHESAPEAKE":{"lat":36.7682,"lng":-76.2875},
-  "SCOTTSDALE":{"lat":33.4942,"lng":-111.9261},"NORTH LAS VEGAS":{"lat":36.1989,"lng":-115.1175},
-  "FREMONT":{"lat":37.5485,"lng":-121.9886},"GILBERT":{"lat":33.3528,"lng":-111.7890},
-  "SAN BERNARDINO":{"lat":34.1083,"lng":-117.2898},"BOISE":{"lat":43.6150,"lng":-116.2023},
-  "BIRMINGHAM":{"lat":33.5186,"lng":-86.8104},"ROCHESTER":{"lat":43.1566,"lng":-77.6088},
-  "RICHMOND":{"lat":37.5407,"lng":-77.4360},"SPOKANE":{"lat":47.6588,"lng":-117.4260},
-  "BUFFALO":{"lat":42.8864,"lng":-78.8784},"DES MOINES":{"lat":41.5868,"lng":-93.6250},
-  "MONTGOMERY":{"lat":32.3668,"lng":-86.3000},"AKRON":{"lat":41.0814,"lng":-81.5190},
-  "LITTLE ROCK":{"lat":34.7465,"lng":-92.2896},"KNOXVILLE":{"lat":35.9606,"lng":-83.9207},
-  "WORCESTER":{"lat":42.2626,"lng":-71.8023},"COLUMBIA":{"lat":34.0007,"lng":-81.0348},
-  "SALT LAKE CITY":{"lat":40.7608,"lng":-111.8910},"TACOMA":{"lat":47.2529,"lng":-122.4443},
-  "HARTFORD":{"lat":41.7658,"lng":-72.6734},"TULSA":{"lat":36.1540,"lng":-95.9928},
-  "CAPE CORAL":{"lat":26.5629,"lng":-81.9495},"TEMPE":{"lat":33.4255,"lng":-111.9400},
-  "AURORA":{"lat":41.7606,"lng":-88.3201},"FORT WAYNE":{"lat":41.0793,"lng":-85.1394},
-  "MORENO VALLEY":{"lat":33.9425,"lng":-117.2297},"FAYETTEVILLE":{"lat":36.0626,"lng":-94.1574},
-  "GLENDALE":{"lat":34.1425,"lng":-118.2551},"OXNARD":{"lat":34.1975,"lng":-119.1771},
-  "HUNTINGTON BEACH":{"lat":33.6603,"lng":-117.9992},"ONTARIO":{"lat":34.0633,"lng":-117.6509},
-  "FONTANA":{"lat":34.0922,"lng":-117.4350},"GARDEN GROVE":{"lat":33.7743,"lng":-117.9378},
-  "SPRINGFIELD":{"lat":37.2153,"lng":-93.2982},"OCALA":{"lat":29.1872,"lng":-82.1401},
-  "PEMBROKE PINES":{"lat":26.0078,"lng":-80.2963},"RANCHO CUCAMONGA":{"lat":34.1064,"lng":-117.5931},
-  "JACKSON":{"lat":32.2988,"lng":-90.1848},"SYRACUSE":{"lat":43.0481,"lng":-76.1474},
-  "FORT LAUDERDALE":{"lat":26.1224,"lng":-80.1373},"CHATTANOOGA":{"lat":35.0456,"lng":-85.3097},
-  "BROWNSVILLE":{"lat":25.9017,"lng":-97.4975},"WORCESTER":{"lat":42.2626,"lng":-71.8023},
-  "AURORA":{"lat":39.7294,"lng":-104.8319},"GRAND RAPIDS":{"lat":42.9634,"lng":-85.6681},
-  "OVERLAND PARK":{"lat":38.9822,"lng":-94.6708},"TALLAHASSEE":{"lat":30.4518,"lng":-84.2807},
-  "HUNTSVILLE":{"lat":34.7304,"lng":-86.5861},"WORCESTER":{"lat":42.2626,"lng":-71.8023},
-  "SHREVEPORT":{"lat":32.5252,"lng":-93.7502},"AUGUSTA":{"lat":33.4735,"lng":-82.0105},
-  "AMARILLO":{"lat":35.2220,"lng":-101.8313},"MOBILE":{"lat":30.6954,"lng":-88.0399},
-  "LITTLE ROCK":{"lat":34.7465,"lng":-92.2896},"COLUMBUS":{"lat":32.4610,"lng":-84.9877},
-  "BRIDGEPORT":{"lat":41.1865,"lng":-73.1952},"TEMPE":{"lat":33.4255,"lng":-111.9400},
-  "PATERSON":{"lat":40.9168,"lng":-74.1718},"LAKEWOOD":{"lat":39.7047,"lng":-105.0814},
-  "SAVANNAH":{"lat":32.0835,"lng":-81.0998},"MESQUITE":{"lat":32.7668,"lng":-96.5992},
-  "CLARKSVILLE":{"lat":36.5298,"lng":-87.3595},"SUNNYVALE":{"lat":37.3688,"lng":-122.0363},
-  "ESCONDIDO":{"lat":33.1192,"lng":-117.0864},"TORRANCE":{"lat":33.8358,"lng":-118.3406},
-  "EUGENE":{"lat":44.0521,"lng":-123.0868},"PASADENA":{"lat":34.1478,"lng":-118.1445},
-  "POMONA":{"lat":34.0551,"lng":-117.7500},"SALINAS":{"lat":36.6777,"lng":-121.6555},
-  "HAYWARD":{"lat":37.6688,"lng":-122.0808},"PALMDALE":{"lat":34.5794,"lng":-118.1165},
-  "LAKEWOOD":{"lat":33.8536,"lng":-118.1339},"SUNNYVALE":{"lat":37.3688,"lng":-122.0363},
-  "POMONA":{"lat":34.0551,"lng":-117.7500},"EL MONTE":{"lat":34.0686,"lng":-118.0276},
-  "SURPRISE":{"lat":33.6292,"lng":-112.3679},"ROSEVILLE":{"lat":38.7521,"lng":-121.2880},
-  "JACKSON":{"lat":42.2459,"lng":-84.4013},"KANSAS CITY":{"lat":39.1155,"lng":-94.6268},
-  "FORT COLLINS":{"lat":40.5853,"lng":-105.0844},"SPRINGFIELD":{"lat":42.1015,"lng":-72.5898},
-  "PEORIA":{"lat":40.6936,"lng":-89.5890},"LANSING":{"lat":42.7325,"lng":-84.5555},
-  "FLINT":{"lat":43.0125,"lng":-83.6875},"VISALIA":{"lat":36.3302,"lng":-119.2921},
-  "WORCESTER":{"lat":42.2626,"lng":-71.8023},"CORONA":{"lat":33.8753,"lng":-117.5664},
-  "LANCASTER":{"lat":34.6868,"lng":-118.1542},"MURFREESBORO":{"lat":35.8456,"lng":-86.3903},
-  "ALEXANDRIA":{"lat":38.8048,"lng":-77.0469},"OCEANSIDE":{"lat":33.1959,"lng":-117.3795},
-  "WARREN":{"lat":42.5145,"lng":-83.0146},"COLUMBIA":{"lat":38.9517,"lng":-92.3341},
-  "STERLING HEIGHTS":{"lat":42.5803,"lng":-83.0302},"NEW HAVEN":{"lat":41.3082,"lng":-72.9282},
-  "MACON":{"lat":32.8407,"lng":-83.6324},"CEDAR RAPIDS":{"lat":41.9779,"lng":-91.6656},
-  "TOPEKA":{"lat":39.0489,"lng":-95.6780},"THOUSAND OAKS":{"lat":34.1706,"lng":-118.8376},
-  "HAMPTON":{"lat":37.0299,"lng":-76.3452},"SIOUX FALLS":{"lat":43.5446,"lng":-96.7311},
-  "SPRINGFIELD":{"lat":39.7817,"lng":-89.6501},"PROVIDENCE":{"lat":41.8240,"lng":-71.4128},
-  "RANCHO CUCAMONGA":{"lat":34.1064,"lng":-117.5931},"ONTARIO":{"lat":34.0633,"lng":-117.6509},
-  "KNOXVILLE":{"lat":35.9606,"lng":-83.9207},"WORCESTER":{"lat":42.2626,"lng":-71.8023},
-  "BARBERTON":{"lat":41.0128,"lng":-81.6051},"EDGERTON":{"lat":42.8361,"lng":-97.9254},
-  "TROY":{"lat":42.6064,"lng":-83.1498},"ADAIRSVILLE":{"lat":34.3693,"lng":-84.9349},
-  "BLYTHEWOOD":{"lat":34.2215,"lng":-80.9976},"SUMMERVILLE":{"lat":33.0185,"lng":-80.1762},
-  "BUFORD":{"lat":34.1215,"lng":-83.9938},"MECHANICSBURG":{"lat":40.2143,"lng":-77.0011},
-  "HOMER":{"lat":42.6375,"lng":-76.1822},"KINGSVILLE":{"lat":27.5159,"lng":-97.8561},
-  "ESSEX":{"lat":44.4895,"lng":-73.1121},"BARBERTON":{"lat":41.0128,"lng":-81.6051},
-  "WHITEHALL":{"lat":42.4334,"lng":-76.4077},"HARRISBURG":{"lat":40.2732,"lng":-76.8867},
-  "CHAMPAIGN":{"lat":40.1164,"lng":-88.2434},"CANTON":{"lat":40.7995,"lng":-81.3784},
-  "SIOUX CITY":{"lat":42.4999,"lng":-96.4003},"FLAT ROCK":{"lat":35.2793,"lng":-82.6874},
-  "AUBURN HILLS":{"lat":42.6875,"lng":-83.2341},"TUALATIN":{"lat":45.3840,"lng":-122.7635},
-  "SHELBYVILLE":{"lat":35.4834,"lng":-86.4603},"DURHAM":{"lat":35.9940,"lng":-78.8986},
-  "LAWRENCEBURG":{"lat":38.0373,"lng":-84.8966},"FALL RIVER":{"lat":41.7015,"lng":-71.1550},
-  "ROBBINSVILLE":{"lat":40.2184,"lng":-74.6132},"MIDDLETOWN":{"lat":41.5623,"lng":-72.6506},
-  "CHINO":{"lat":34.0122,"lng":-117.6889},"BARBERTON":{"lat":41.0128,"lng":-81.6051},"AJAX":{"lat":43.8509,"lng":-79.0204},"ANDERSON":{"lat":34.5034,"lng":-82.6501},"ANNVILLE":{"lat":40.329,"lng":-76.516},"ARDEN":{"lat":35.5129,"lng":-82.5518},"ARLINGTON HEIGHTS":{"lat":42.0883,"lng":-87.9806},"BAKERSFIELD":{"lat":35.3733,"lng":-119.0187},"BALCH SPRINGS":{"lat":32.7257,"lng":-96.6294},"BARNSTABLE":{"lat":41.7003,"lng":-70.3002},"BARRE":{"lat":44.197,"lng":-72.5023},"BARTLESVILLE":{"lat":36.7473,"lng":-95.9808},"BASTROP":{"lat":30.1105,"lng":-97.3153},"BAY SHORE":{"lat":40.7287,"lng":-73.2457},"BEDFORD HEIGHTS":{"lat":41.4023,"lng":-81.506},"BELLEVILLE":{"lat":38.52,"lng":-89.984},"BELVIDERE":{"lat":42.2639,"lng":-88.844},"BENSENVILLE":{"lat":41.9578,"lng":-87.9401},"BEREA":{"lat":41.3662,"lng":-81.8549},"BETHLEHEM":{"lat":40.6259,"lng":-75.3705},"BILLINGS":{"lat":45.7833,"lng":-108.5007},"BLACKLICK":{"lat":39.9156,"lng":-82.8471},"BORDEN":{"lat":38.4542,"lng":-85.9069},"BOURNE":{"lat":41.7445,"lng":-70.5962},"BRAINTREE":{"lat":42.2084,"lng":-70.9995},"BRAMPTON":{"lat":43.7315,"lng":-79.7624},"BRIDGETON":{"lat":38.7567,"lng":-90.4418},"BROOK PARK":{"lat":41.3987,"lng":-81.8007},"BROOKSVILLE":{"lat":28.5553,"lng":-82.3882},"BROOKVILLE":{"lat":39.4173,"lng":-84.4135},"BROOMFIELD":{"lat":39.9205,"lng":-105.0867},"BROWNFIELD":{"lat":33.1801,"lng":-102.2746},"BRUNSWICK":{"lat":41.2384,"lng":-81.8418},"BURBANK":{"lat":34.1808,"lng":-118.309},"BURLESON":{"lat":32.5421,"lng":-97.3208},"BURR RIDGE":{"lat":41.7478,"lng":-87.9168},"CALEXICO":{"lat":32.6789,"lng":-115.4989},"CALHOUN":{"lat":34.5023,"lng":-84.9513},"CAMBRIDGE":{"lat":42.3736,"lng":-71.1097},"CAMBRIDGE SPRINGS":{"lat":41.802,"lng":-80.0612},"CANAL FULTON":{"lat":40.8884,"lng":-81.5985},"CANTON TOWNSHIP":{"lat":42.3084,"lng":-83.4827},"CAROL STREAM":{"lat":41.9131,"lng":-88.1345},"CENTENNIAL":{"lat":39.5807,"lng":-104.8772},"CHATSWORTH":{"lat":34.2576,"lng":-118.6045},"CHRISTIANA":{"lat":35.5103,"lng":-86.3858},"CIRCLEVILLE":{"lat":39.6006,"lng":-82.9474},"CLARKSBURG":{"lat":39.2806,"lng":-80.3423},"CLEARWATER":{"lat":27.9659,"lng":-82.8001},"CLEBURNE":{"lat":32.3501,"lng":-97.3836},"COALVILLE":{"lat":40.9174,"lng":-111.3994},"COCKEYSVILLE":{"lat":39.4784,"lng":-76.6427},"COMMERCE TOWNSHIP":{"lat":42.5739,"lng":-83.5013},"CONCORD":{"lat":43.2081,"lng":-71.5376},"CONNERSVILLE":{"lat":39.6414,"lng":-85.1413},"CONVERSE":{"lat":29.5127,"lng":-98.3127},"CREEDMOOR":{"lat":36.1157,"lng":-78.6838},"CROWN POINT":{"lat":41.417,"lng":-87.3653},"CULLODEN":{"lat":38.4062,"lng":-82.0829},"DALTON":{"lat":34.7698,"lng":-84.9702},"DANBURY":{"lat":41.3948,"lng":-73.454},"DAVENPORT":{"lat":41.5236,"lng":-90.5776},"DELPHOS":{"lat":40.8437,"lng":-84.3427},"DENTON":{"lat":33.2148,"lng":-97.1331},"DETROIT":{"lat":42.3314,"lng":-83.0458},"DISPUTANTA":{"lat":37.0782,"lng":-77.1972},"DIXON":{"lat":41.8392,"lng":-89.4787},"DORAL":{"lat":25.8195,"lng":-80.3556},"DOUGLAS":{"lat":31.3446,"lng":-109.5453},"DOUGLASVILLE":{"lat":33.7512,"lng":-84.7474},"DUNCAN":{"lat":34.5023,"lng":-97.9578},"DUNCANSVILLE":{"lat":40.4245,"lng":-78.4336},"DUNLAP":{"lat":41.8489,"lng":-95.4711},"EAST HANOVER":{"lat":40.8212,"lng":-74.3629},"EDISON":{"lat":40.5187,"lng":-74.4121},"EDMOND":{"lat":35.6528,"lng":-97.4781},"ELDRIDGE":{"lat":41.6553,"lng":-90.5854},"ELGIN":{"lat":42.0354,"lng":-88.2826},"ELK GROVE VILLAGE":{"lat":42.0042,"lng":-87.9701},"ELKRIDGE":{"lat":39.2148,"lng":-76.7305},"ELYRIA":{"lat":41.3684,"lng":-82.1074},"EMINENCE":{"lat":38.3706,"lng":-85.1802},"ENNIS":{"lat":32.3293,"lng":-96.6252},"ERIE":{"lat":42.1292,"lng":-80.0851},"ETNA":{"lat":40.5048,"lng":-79.9557},"EUCLID":{"lat":41.5931,"lng":-81.5268},"EVANS CITY":{"lat":40.7701,"lng":-80.0626},"FAIRFIELD":{"lat":39.3456,"lng":-84.5596},"FAIRMONT CITY":{"lat":38.6451,"lng":-90.0948},"FALLSTON":{"lat":39.5312,"lng":-76.4288},"FORT KNOX":{"lat":37.8898,"lng":-85.9627},"FORT MILL":{"lat":35.0079,"lng":-80.9451},"FORT MYERS":{"lat":26.6406,"lng":-81.8723},"FORT WALTON BEACH":{"lat":30.406,"lng":-86.6244},"FOXWORTH":{"lat":31.2535,"lng":-89.9673},"FRANKLIN":{"lat":35.9251,"lng":-86.8689},"FRANKLIN TOWNSHIP":{"lat":40.4723,"lng":-74.5382},"FREEPORT":{"lat":42.2967,"lng":-89.6212},"FULSHEAR":{"lat":29.6913,"lng":-95.8835},"GAFFNEY":{"lat":35.0718,"lng":-81.6498},"GAHANNA":{"lat":40.0162,"lng":-82.8691},"GAINESBORO":{"lat":36.3548,"lng":-85.6597},"GAINESVILLE":{"lat":29.6516,"lng":-82.3248},"GAMBRILLS":{"lat":39.0437,"lng":-76.6641},"GARFIELD":{"lat":40.8793,"lng":-74.1121},"GARFIELD HEIGHTS":{"lat":41.417,"lng":-81.606},"GASTONIA":{"lat":35.2621,"lng":-81.1873},"GENEVA":{"lat":41.8031,"lng":-88.3048},"GEORGETOWN":{"lat":30.6327,"lng":-97.6774},"GIG HARBOR":{"lat":47.329,"lng":-122.5793},"GIRARD":{"lat":41.1539,"lng":-80.7023},"GLEASON":{"lat":36.2117,"lng":-88.6281},"GLEN ELLYN":{"lat":41.8789,"lng":-88.0631},"GOOSE CREEK":{"lat":32.981,"lng":-80.0326},"GRAND PRAIRIE":{"lat":32.746,"lng":-96.9978},"GRAPEVINE":{"lat":32.9343,"lng":-97.0781},"GREATER SUDBURY":{"lat":46.4917,"lng":-80.993},"GREENFIELD":{"lat":42.5876,"lng":-72.5993},"GREENVILLE":{"lat":34.8526,"lng":-82.394},"GRIFFIN":{"lat":33.2468,"lng":-84.2641},"GUELPH":{"lat":43.5448,"lng":-80.2482},"GULF SHORES":{"lat":30.246,"lng":-87.7008},"GURNEE":{"lat":42.3706,"lng":-87.9284},"HAGERSTOWN":{"lat":39.6418,"lng":-77.7199},"HALLANDALE BEACH":{"lat":25.9812,"lng":-80.1484},"HALTOM CITY":{"lat":32.7993,"lng":-97.2697},"HARTVILLE":{"lat":40.9645,"lng":-81.3318},"HAZEL PARK":{"lat":42.4623,"lng":-83.1044},"HAZLE TOWNSHIP":{"lat":40.9701,"lng":-75.9549},"HOLLISTER":{"lat":36.8524,"lng":-121.4016},"HOPKINSVILLE":{"lat":36.8656,"lng":-87.4886},"HUTTO":{"lat":30.5432,"lng":-97.5461},"INDIAN TRAIL":{"lat":35.0765,"lng":-80.664},"INWOOD":{"lat":38.954,"lng":-78.0397},"JAMESTOWN":{"lat":42.097,"lng":-79.2353},"JANESVILLE":{"lat":42.6827,"lng":-89.0187},"JENKINS TOWNSHIP":{"lat":41.3048,"lng":-75.8038},"JOHNSTOWN":{"lat":40.3267,"lng":-78.9219},"JONESBORO":{"lat":35.8423,"lng":-90.7043},"KATY":{"lat":29.7858,"lng":-95.8244},"KEARNEYSVILLE":{"lat":39.384,"lng":-77.8911},"KENANSVILLE":{"lat":34.9621,"lng":-77.9638},"KENT":{"lat":41.1534,"lng":-81.3601},"KETTERING":{"lat":39.6895,"lng":-84.1688},"KISSIMMEE":{"lat":28.2919,"lng":-81.4076},"LADSON":{"lat":32.9849,"lng":-80.1065},"LAFAYETTE":{"lat":30.2241,"lng":-92.0198},"LAKE CHARLES":{"lat":30.2266,"lng":-93.2174},"LEAMINGTON":{"lat":42.0493,"lng":-82.597},"LEANDER":{"lat":30.5788,"lng":-97.8531},"LEBANON":{"lat":36.2081,"lng":-86.2911},"LENOIR CITY":{"lat":35.7962,"lng":-84.2527},"LIBERTY HILL":{"lat":30.6627,"lng":-97.9225},"LIBERTYVILLE":{"lat":42.2803,"lng":-87.9528},"LINCOLN":{"lat":40.8136,"lng":-96.7026},"LINDALE":{"lat":32.5154,"lng":-95.4085},"LISBON":{"lat":40.7698,"lng":-80.7673},"LITHIA SPRINGS":{"lat":33.794,"lng":-84.6571},"LITITZ":{"lat":40.157,"lng":-76.3063},"LOCKBOURNE":{"lat":39.8098,"lng":-82.9946},"LONGWOOD":{"lat":28.7028,"lng":-81.3384},"LOVELAND":{"lat":40.3978,"lng":-105.0749},"MACHESNEY PARK":{"lat":42.3678,"lng":-89.0348},"MACOMB":{"lat":40.4592,"lng":-90.6718},"MACUNGIE":{"lat":40.5151,"lng":-75.5685},"MAHOPAC":{"lat":41.3701,"lng":-73.7457},"MANDEVILLE":{"lat":30.3538,"lng":-90.084},"MANKATO":{"lat":44.1636,"lng":-93.9994},"MANSFIELD":{"lat":40.7584,"lng":-82.5154},"MARIETTA":{"lat":33.9526,"lng":-84.5499},"MARYSVILLE":{"lat":40.2362,"lng":-83.3669},"MASSENA":{"lat":44.9284,"lng":-74.8924},"MCCORDSVILLE":{"lat":39.8978,"lng":-85.9219},"MEBANE":{"lat":36.096,"lng":-79.2669},"MEDLEY":{"lat":25.8268,"lng":-80.3362},"MELBOURNE":{"lat":28.0836,"lng":-80.6081},"MEXIA":{"lat":31.6796,"lng":-96.4822},"MIDLAND":{"lat":31.9973,"lng":-102.0779},"MIDWAY":{"lat":31.9835,"lng":-97.1411},"MILFORD":{"lat":41.2237,"lng":-73.0568},"MILPITAS":{"lat":37.4323,"lng":-121.8996},"MIRAMAR":{"lat":25.9871,"lng":-80.2322},"MISHAWAKA":{"lat":41.662,"lng":-86.1586},"MISSION":{"lat":26.2159,"lng":-98.3252},"MISSISSAUGA":{"lat":43.589,"lng":-79.6441},"MONTPELIER":{"lat":44.2601,"lng":-72.5754},"MOOERS":{"lat":44.964,"lng":-73.5771},"MORRILTON":{"lat":35.1512,"lng":-92.7432},"MOSCOW":{"lat":46.7324,"lng":-117.0002},"MOUNT JULIET":{"lat":36.2001,"lng":-86.5186},"MOUNT VERNON":{"lat":38.7173,"lng":-77.107},"MT. JULIET":{"lat":36.2001,"lng":-86.5186},"NAPOLEON":{"lat":41.3956,"lng":-84.1249},"NATIONAL PARK":{"lat":39.8673,"lng":-75.1796},"NATRONA HEIGHTS":{"lat":40.6362,"lng":-79.7276},"NAUGATUCK":{"lat":41.4851,"lng":-73.0515},"NEW ALBANY":{"lat":38.2859,"lng":-85.8241},"NEW BRITAIN":{"lat":41.6612,"lng":-72.7795},"NEW PALTZ":{"lat":41.7462,"lng":-74.0865},"NEWMARKET":{"lat":44.0451,"lng":-79.4615},"NOGALES":{"lat":31.3404,"lng":-110.9346},"NORCROSS":{"lat":33.9412,"lng":-84.2135},"NORMAL":{"lat":40.5142,"lng":-88.9906},"NORTH BERGEN":{"lat":40.7993,"lng":-74.0246},"NORTH CANTON":{"lat":40.8759,"lng":-81.4029},"NORTH LITTLE ROCK":{"lat":34.7695,"lng":-92.2671},"NORTH PLATTE":{"lat":41.1236,"lng":-100.7654},"NORTHLAKE":{"lat":41.9181,"lng":-87.9001},"NORTON":{"lat":41.029,"lng":-81.6349},"OAK CREEK":{"lat":42.8816,"lng":-87.8629},"OAKLAND":{"lat":37.8044,"lng":-122.2712},"OAKVILLE":{"lat":43.4675,"lng":-79.6877},"OCEAN CITY":{"lat":38.3365,"lng":-75.0849},"OLATHE":{"lat":38.8814,"lng":-94.8191},"OWOSSO":{"lat":42.9981,"lng":-84.1769},"OXON HILL":{"lat":38.8032,"lng":-76.9974},"OZARK":{"lat":35.4873,"lng":-93.8268},"PAINESVILLE":{"lat":41.7242,"lng":-81.2454},"PALM BAY":{"lat":27.9884,"lng":-80.5887},"PEORIA HEIGHTS":{"lat":40.7478,"lng":-89.5723},"PERU":{"lat":41.3353,"lng":-89.1287},"PETERSBURG":{"lat":37.2279,"lng":-77.4019},"PFLUGERVILLE":{"lat":30.4393,"lng":-97.62},"PHARR":{"lat":26.1948,"lng":-98.1836},"PILESGROVE":{"lat":39.6626,"lng":-75.341},"PLAINFIELD":{"lat":41.6298,"lng":-88.2034},"PORT ALLEN":{"lat":30.4524,"lng":-91.2043},"PORT HURON":{"lat":42.9709,"lng":-82.4249},"PORTSMOUTH":{"lat":36.8354,"lng":-76.2983},"RANGER":{"lat":32.4707,"lng":-98.6787},"RANTOUL":{"lat":40.3089,"lng":-88.1545},"RIPLEY":{"lat":38.7462,"lng":-83.8449},"RIVERTON":{"lat":43.0249,"lng":-108.3803},"RIVIERA BEACH":{"lat":26.7754,"lng":-80.0578},"ROANOKE":{"lat":37.271,"lng":-79.9414},"ROCKFORD":{"lat":42.2711,"lng":-89.0937},"ROCKVILLE":{"lat":39.084,"lng":-77.1528},"ROMEOVILLE":{"lat":41.6472,"lng":-88.0895},"ROSSVILLE":{"lat":34.979,"lng":-85.2891},"ROYAL OAK":{"lat":42.4895,"lng":-83.1446},"SALINA":{"lat":38.8403,"lng":-97.6114},"SALISBURY":{"lat":38.3607,"lng":-75.5994},"SAND SPRINGS":{"lat":36.1395,"lng":-96.1089},"SEGUIN":{"lat":29.5688,"lng":-97.9647},"SELMA":{"lat":32.4074,"lng":-87.0211},"SEYMOUR":{"lat":41.394,"lng":-74.9962},"SHADY HILLS":{"lat":28.4011,"lng":-82.5282},"SHAFTER":{"lat":35.5007,"lng":-119.2718},"SILVER SPRING TOWNSHIP":{"lat":40.2412,"lng":-77.1161},"SOUTH BRUNSWICK TOWNSHIP":{"lat":40.3754,"lng":-74.5321},"SPRING":{"lat":30.0799,"lng":-95.4172},"SPRINGDALE":{"lat":36.1867,"lng":-94.1288},"ST. LOUIS":{"lat":38.627,"lng":-90.1994},"STANFIELD":{"lat":35.2276,"lng":-80.4126},"STATE COLLEGE":{"lat":40.7934,"lng":-77.86},"STOW":{"lat":41.1595,"lng":-81.4401},"STRONGSVILLE":{"lat":41.3145,"lng":-81.8357},"SUMNER":{"lat":47.2029,"lng":-122.2284},"SUN CITY":{"lat":33.6012,"lng":-112.2719},"SUN PRAIRIE":{"lat":43.1836,"lng":-89.2137},"TAYLORSVILLE":{"lat":40.6591,"lng":-111.9488},"TECUMSEH":{"lat":42.0045,"lng":-83.9441},"THE WOODLANDS":{"lat":30.1658,"lng":-95.4613},"TITUSVILLE":{"lat":28.6122,"lng":-80.8076},"TOMBALL":{"lat":30.0974,"lng":-95.6163},"TOWSON":{"lat":39.4015,"lng":-76.6019},"TREMONT":{"lat":40.6895,"lng":-89.4898},"TRENTON":{"lat":40.2171,"lng":-74.7429},"TUKWILA":{"lat":47.474,"lng":-122.2621},"TWINSBURG":{"lat":41.3123,"lng":-81.4401},"VALLEY CITY":{"lat":46.9238,"lng":-98.0036},"VINTON":{"lat":37.2793,"lng":-80.0151},"WADSWORTH":{"lat":41.0273,"lng":-81.7302},"WARRENDALE":{"lat":40.6487,"lng":-80.0887},"WAYNE":{"lat":40.0573,"lng":-74.2557},"WELLINGTON":{"lat":26.659,"lng":-80.2423},"WELLS":{"lat":43.1145,"lng":-70.712},"WELLSVILLE":{"lat":42.1195,"lng":-77.9483},"WENATCHEE":{"lat":47.4235,"lng":-120.3103},"WEST CHICAGO":{"lat":41.8953,"lng":-88.2076},"WEST DES MOINES":{"lat":41.5772,"lng":-93.7113},"WEST JEFFERSON":{"lat":39.9445,"lng":-83.2741},"WEST LAFAYETTE":{"lat":40.4259,"lng":-86.9081},"WEST PALM BEACH":{"lat":26.7153,"lng":-80.0534},"WEST SPRINGFIELD":{"lat":42.1026,"lng":-72.6468},"WINDSOR":{"lat":42.3149,"lng":-83.0364},"WINSTED":{"lat":41.9254,"lng":-73.0626},"WINTER HAVEN":{"lat":28.0222,"lng":-81.7329},"WINTERVILLE":{"lat":35.5318,"lng":-77.3997},"WIXOM":{"lat":42.5245,"lng":-83.5366},"WOODRIDGE":{"lat":41.7478,"lng":-88.0423},"WOOSTER":{"lat":40.8051,"lng":-81.9346},"WORTH":{"lat":41.6909,"lng":-87.7937},"YORK":{"lat":39.9626,"lng":-76.7277},"YORKTOWN":{"lat":37.2388,"lng":-76.5097}
-};
-var parsedRows = null;
-
-function fmt(n){if(n===null||n===undefined||isNaN(n))return '$0.00';return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
-function fmtN(n){return Number(n||0).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});}
-function r2(n){return Math.round((n||0)*100)/100;}
-function fmtPct(n){return (Math.round((n||0)*10)/10).toFixed(1)+'%';}
-function fmtMi(n){return Number(n||0).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0})+' mi';}
-
-function getCityKey(loc){
-  if(!loc)return null;
-  var s=String(loc).toUpperCase().trim();
-  // Extract city from "City, ST, US" or "City, ST" format
-  var parts=s.split(',');
-  var city=parts[0].trim();
-  return CITY_COORDS[city]?city:null;
+function fmt(n) {
+  if (n === null || n === undefined || isNaN(n)) return '0';
+  return Number(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
 }
+function r2(n) { return Math.round((n||0)*100)/100; }
+function fmtPct(n) { return (Math.round((n||0)*10)/10).toFixed(1); }
 
-function calcMiles(origin, dest){
-  var ok=getCityKey(origin), dk=getCityKey(dest);
-  if(!ok||!dk)return null;
-  var o=CITY_COORDS[ok], d=CITY_COORDS[dk];
-  // Haversine formula
-  var R=3958.8; // Earth radius in miles
-  var dLat=(d.lat-o.lat)*Math.PI/180;
-  var dLng=(d.lng-o.lng)*Math.PI/180;
-  var a=Math.sin(dLat/2)*Math.sin(dLat/2)+
-        Math.cos(o.lat*Math.PI/180)*Math.cos(d.lat*Math.PI/180)*
-        Math.sin(dLng/2)*Math.sin(dLng/2);
-  var c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-  var dist=R*c;
-  // Apply 1.2x factor to approximate driving vs straight-line
-  return Math.round(dist*1.2);
+function toggleNav() {
+  document.getElementById('navBtn').classList.toggle('open');
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
 }
+function closeNav() {
+  ['navBtn','sidebar','overlay'].forEach(id => document.getElementById(id).classList.remove('open'));
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeNav(); });
 
-document.getElementById('uploadZone').addEventListener('click',function(){document.getElementById('fileInput').click();});
-document.getElementById('fileInput').addEventListener('change',function(){
-  var file=this.files[0];if(!file)return;
-  var reader=new FileReader();
-  reader.onload=function(e){
-    try{
-      var wb=XLSX.read(e.target.result,{type:'array',cellDates:true});
-      var sn=wb.SheetNames.indexOf('Data')>=0?'Data':wb.SheetNames[0];
-      parsedRows=XLSX.utils.sheet_to_json(wb.Sheets[sn],{raw:false,defval:''});
-      var fs=document.getElementById('fileStatus');
-      fs.style.display='block';
-      fs.textContent='✓ '+file.name+' · '+parsedRows.length+' rows loaded';
+function handleFile(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb = XLSX.read(e.target.result, {type:'array', cellDates:true});
+      // Find the Data sheet
+      const sheetName = wb.SheetNames.includes('Data') ? 'Data' : wb.SheetNames[wb.SheetNames.length-1];
+      const ws = wb.Sheets[sheetName];
+      parsedRows = XLSX.utils.sheet_to_json(ws, {raw:false, defval:''});
+      document.getElementById('fileStatus').style.display = 'block';
+      document.getElementById('fileStatus').textContent = '✓ ' + file.name + ' · ' + parsedRows.length + ' rows loaded';
       document.getElementById('uploadZone').classList.add('has-file');
-    }catch(err){showErr('Could not read file: '+err.message);}
+    } catch(err) {
+      showErr('Could not read file: ' + err.message);
+    }
   };
   reader.readAsArrayBuffer(file);
-});
-document.getElementById('backBtn').addEventListener('click',function(){
-  document.getElementById('summary').style.display='none';
-  document.getElementById('setup').style.display='flex';
-});
-document.getElementById('genBtn').addEventListener('click',generate);
-
-function attachSort(tableId, data, defaultCol, defaultAsc, renderFn) {
-  var state = {col: defaultCol, asc: defaultAsc};
-  var ths = document.querySelectorAll('#'+tableId+' th');
-  function doSort() {
-    data.sort(function(a,b){
-      var av=a[state.col], bv=b[state.col];
-      if(typeof av==='string') return state.asc?av.localeCompare(bv):bv.localeCompare(av);
-      return state.asc?av-bv:bv-av;
-    });
-    var tbody=document.querySelector('#'+tableId+' tbody');
-    tbody.innerHTML=data.map(renderFn).join('');
-    ths.forEach(function(th){
-      th.classList.remove('sort-asc','sort-desc','sort-none');
-      th.classList.add(th.dataset.col===state.col?(state.asc?'sort-asc':'sort-desc'):'sort-none');
-    });
-  }
-  ths.forEach(function(th){
-    th.classList.add('sort-none');
-    th.addEventListener('click',function(){
-      if(state.col===this.dataset.col){state.asc=!state.asc;}
-      else{state.col=this.dataset.col;state.asc=(this.dataset.type==='str');}
-      doSort();
-    });
-  });
-  doSort();
 }
 
-function generate(){
-  if(!parsedRows){showErr('Please upload a file first.');return;}
-  var period=document.getElementById('periodLabel').value||'All Periods';
-  var SKIP=['Canceled','Draft','Tender - offered'];
-  var loads=[];
+function generate() {
+  if (!parsedRows) { showErr('Please upload a file first.'); return; }
 
-  parsedRows.forEach(function(row){
-    var status=String(row['Status']||'').trim();
-    if(SKIP.indexOf(status)>=0)return;
-    var customer=String(row['Primary Customer']||row['Customer']||'').trim();
-    var carrier=String(row['Primary Carrier']||row['Carrier']||'').trim();
-    if(!customer)return;
-    var revenue=parseFloat(String(row['Customer bill']||row['Revenue']||'0').replace(/[$,]/g,''))||0;
-    var carrierCost=parseFloat(String(row['Carrier and other pay']||row['Carrier pay']||'0').replace(/[$,]/g,''))||0;
-    var net=parseFloat(String(row['Net revenue']||'0').replace(/[$,]/g,''))||0;
-    if(net===0&&revenue>0)net=r2(revenue-carrierCost);
-    var origin=String(row['Origin']||'').trim();
-    var dest=String(row['Destination']||'').trim();
-    var miles=calcMiles(origin,dest);
-    var pickDate=null;
-    var pd=row['Pickup date']||row['Pickup Date'];
-    if(pd){try{pickDate=new Date(pd);}catch(e){}}
-    loads.push({customer:customer,carrier:carrier,revenue:revenue,carrierCost:carrierCost,net:net,origin:origin,dest:dest,miles:miles,pickDate:pickDate});
+  const period = document.getElementById('periodLabel').value || 'All Periods';
+
+  // Parse rows — exclude cancelled/draft
+  const SKIP = ['Canceled','Draft','Tender - offered'];
+  const loads = [];
+  parsedRows.forEach(row => {
+    const status = String(row['Status']||'').trim();
+    if (SKIP.includes(status)) return;
+    const customer = String(row['Customer']||'').trim();
+    if (!customer || customer === 'Unknown') return;
+    const revenue = parseFloat(row['Customer bill']) || parseFloat(row['Revenue']) || 0;
+    const net     = parseFloat(row['Net revenue']) || 0;
+    const margin  = parseFloat(row['Margin']) || 0;
+    const carrier_cost = r2(revenue - net);
+    let pickDate = null;
+    const pd = row['Pickup date'] || row['Pickup Date'];
+    if (pd) { try { pickDate = new Date(pd); } catch(e) {} }
+    const origin = String(row['Origin']||'').replace(', US','').trim();
+    const dest   = String(row['Destination']||'').replace(', US','').trim();
+    loads.push({customer, revenue, net, margin, carrier_cost, pickDate, origin, dest, status});
   });
 
-  if(!loads.length){showErr('No valid shipment data found. Check column names match Turvo Shipment Summary export.');return;}
+  if (!loads.length) { showErr('No valid shipment data found. Check file format.'); return; }
 
-  // Totals
-  var totRev=r2(loads.reduce(function(s,l){return s+l.revenue;},0));
-  var totCC=r2(loads.reduce(function(s,l){return s+l.carrierCost;},0));
-  var totNet=r2(loads.reduce(function(s,l){return s+l.net;},0));
-  var totLoads=loads.length;
-  var totGP=totRev>0?r2(totNet/totRev*100):0;
-  var minMiles=parseInt(document.getElementById('minMiles').value)||0;
-  var milesLoads=loads.filter(function(l){return l.miles;});
-  var rpmLoads=loads.filter(function(l){return l.miles&&l.miles>=minMiles;});
-  var totMiles=milesLoads.reduce(function(s,l){return s+l.miles;},0);
-  var totRPMMiles=rpmLoads.reduce(function(s,l){return s+l.miles;},0);
-  var totRPMRev=rpmLoads.reduce(function(s,l){return s+l.revenue;},0);
-  var avgRPM=totRPMMiles>0?r2(totRPMRev/totRPMMiles):0;
-  var milesCalcPct=Math.round(milesLoads.length/loads.length*100);
-  var rpmExcluded=milesLoads.length-rpmLoads.length;
+  // ── Totals ──
+  const totalRevenue     = r2(loads.reduce((s,l)=>s+l.revenue,0));
+  const totalNet         = r2(loads.reduce((s,l)=>s+l.net,0));
+  const totalCarrierCost = r2(loads.reduce((s,l)=>s+l.carrier_cost,0));
+  const totalLoads       = loads.length;
+  const avgMargin        = totalRevenue > 0 ? r2(totalNet/totalRevenue*100) : 0;
+  const avgRevPerLoad    = r2(totalRevenue/totalLoads);
 
-  // Customer map
-  var custMap={};
-  loads.forEach(function(l){
-    if(!custMap[l.customer])custMap[l.customer]={loads:0,revenue:0,net:0,carrierCost:0};
+  // ── Customer breakdown ──
+  const custMap = {};
+  loads.forEach(l => {
+    if (!custMap[l.customer]) custMap[l.customer] = {loads:0, revenue:0, net:0, carrier_cost:0};
     custMap[l.customer].loads++;
-    custMap[l.customer].revenue+=l.revenue;
-    custMap[l.customer].net+=l.net;
-    custMap[l.customer].carrierCost+=l.carrierCost;
-  });
-  var custData=Object.entries(custMap).map(function(e){
-    return {name:e[0],loads:e[1].loads,revenue:r2(e[1].revenue),net:r2(e[1].net),carrierCost:r2(e[1].carrierCost),gp:e[1].revenue>0?r2(e[1].net/e[1].revenue*100):0};
-  }).sort(function(a,b){return b.revenue-a.revenue;});
-
-  // Carrier map
-  var carrMap={};
-  loads.forEach(function(l){
-    if(!l.carrier)return;
-    if(!carrMap[l.carrier])carrMap[l.carrier]={loads:0,pay:0,miles:0,milesCount:0};
-    carrMap[l.carrier].loads++;
-    carrMap[l.carrier].pay+=l.carrierCost;
-    if(l.miles&&l.miles>=150){carrMap[l.carrier].miles=(carrMap[l.carrier].miles||0)+l.miles;carrMap[l.carrier].milesCount=(carrMap[l.carrier].milesCount||0)+1;carrMap[l.carrier].rpmMiles=(carrMap[l.carrier].rpmMiles||0)+l.miles;carrMap[l.carrier].rpmPay=(carrMap[l.carrier].rpmPay||0)+l.carrierCost;}
-  });
-  var carrData=Object.entries(carrMap).map(function(e){
-    var rpm=e[1].rpmMiles>0?r2(e[1].rpmPay/e[1].rpmMiles):null;
-    return {name:e[0],loads:e[1].loads,pay:r2(e[1].pay),miles:Math.round(e[1].miles),rpm:rpm};
-  }).sort(function(a,b){return b.pay-a.pay;});
-
-  // Weekly map
-  var weekMap={};
-  loads.forEach(function(l){
-    if(!l.pickDate)return;
-    var d=new Date(l.pickDate);
-    var sun=new Date(d);sun.setDate(d.getDate()-d.getDay());sun.setHours(0,0,0,0);
-    var key=sun.toISOString().slice(0,10);
-    if(!weekMap[key])weekMap[key]={sun:sun,loads:0,revenue:0,net:0,miles:0};
-    weekMap[key].loads++;weekMap[key].revenue+=l.revenue;weekMap[key].net+=l.net;
-    if(l.miles)weekMap[key].miles+=l.miles;
-    if(l.miles&&l.miles>=minMiles){weekMap[key].rpmMiles=weekMap[key].rpmMiles||0;weekMap[key].rpmMiles+=l.miles;weekMap[key].rpmRev=weekMap[key].rpmRev||0;weekMap[key].rpmRev+=l.revenue;}
-  });
-  var weekData=Object.keys(weekMap).sort().map(function(key){
-    var wk=weekMap[key];
-    var sat=new Date(wk.sun);sat.setDate(wk.sun.getDate()+6);
-    var fD=function(d){return (d.getMonth()+1)+'/'+(d.getDate());};
-    var rev=r2(wk.revenue),net=r2(wk.net);
-    var rpm=wk.rpmMiles>0?r2(wk.rpmRev/wk.rpmMiles):null;
-    return {label:fD(wk.sun)+' – '+fD(sat),loads:wk.loads,revenue:rev,net:net,gp:rev>0?r2(net/rev*100):0,miles:Math.round(wk.miles),rpm:rpm};
+    custMap[l.customer].revenue += l.revenue;
+    custMap[l.customer].net     += l.net;
+    custMap[l.customer].carrier_cost += l.carrier_cost;
   });
 
-  // Build customer table
-  function buildCustTable(data){
-    return '<table class="data-table" id="custTable"><thead><tr>'
-      +'<th data-col="name" data-type="str">Customer</th>'
-      +'<th class="r" data-col="loads" data-type="num">Loads</th>'
-      +'<th class="r" data-col="revenue" data-type="num">Revenue</th>'
-      +'<th class="r" data-col="carrierCost" data-type="num">Carrier Cost</th>'
-      +'<th class="r" data-col="net" data-type="num">Net Rev</th>'
-      +'<th class="r" data-col="gp" data-type="num">GP %</th>'
-      +'</tr></thead><tbody id="custBody"></tbody></table>';
-  }
-  function renderCustRow(cv){
-    var gpColor=cv.gp>=30?'#4ade80':cv.gp>=15?'#e8a020':'#f87171';
-    var barW=Math.min(100,Math.max(0,cv.gp));
-    var barColor=cv.gp>=30?'#4ade80':cv.gp>=15?'#e8a020':'#cc1e2b';
-    return '<tr><td class="name" title="'+cv.name+'">'+cv.name+'</td>'
-      +'<td class="r">'+cv.loads+'</td>'
-      +'<td class="r" style="color:#fff;font-weight:600">'+fmt(cv.revenue)+'</td>'
-      +'<td class="r" style="color:#f87171">'+fmt(cv.carrierCost)+'</td>'
-      +'<td class="r" style="color:'+(cv.net>=0?'#4ade80':'#f87171')+';font-weight:600">'+fmt(cv.net)+'</td>'
-      +'<td class="r"><div class="gp-bar-wrap"><div class="gp-bar"><div class="gp-bar-fill" style="width:'+barW+'%;background:'+barColor+'"></div></div>'
-      +'<span style="color:'+gpColor+'">'+fmtPct(cv.gp)+'</span></div></td></tr>';
-  }
+  const custRows = Object.entries(custMap)
+    .sort((a,b) => b[1].revenue - a[1].revenue)
+    .map(([name, cv]) => {
+      const gp = cv.revenue > 0 ? r2(cv.net/cv.revenue*100) : 0;
+      const gpColor = gp>=30?'#4ade80':gp>=15?'#e8a020':'#f87171';
+      const barW = Math.min(100, Math.max(0, gp));
+      const barColor = gp>=30?'#4ade80':gp>=15?'#e8a020':'#cc1e2b';
+      return `<tr>
+        <td class="name" title="${name}">${name}</td>
+        <td class="r">${cv.loads}</td>
+        <td class="rev">$${fmt(r2(cv.revenue))}</td>
+        <td class="r" style="color:#f87171">-$${fmt(r2(cv.carrier_cost))}</td>
+        <td class="net" style="color:${cv.net>=0?'#4ade80':'#f87171'}">$${fmt(r2(cv.net))}</td>
+        <td class="gp" style="color:${gpColor}">
+          <div class="gp-bar-wrap">
+            <div class="gp-bar"><div class="gp-bar-fill" style="width:${barW}%;background:${barColor}"></div></div>
+            <span>${fmtPct(gp)}%</span>
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
 
-  // Build carrier table
-  function buildCarrTable(data){
-    return '<table class="data-table" id="carrTable"><thead><tr>'
-      +'<th data-col="name" data-type="str">Carrier</th>'
-      +'<th class="r" data-col="loads" data-type="num">Loads</th>'
-      +'<th class="r" data-col="pay" data-type="num">Carrier Pay</th>'
-      +'<th class="r" data-col="miles" data-type="num">Est. Miles</th>'
-      +'<th class="r" data-col="rpm" data-type="num">RPM</th>'
-      +'</tr></thead><tbody id="carrBody"></tbody></table>';
-  }
-  function renderCarrRow(cv){
-    return '<tr><td class="name" title="'+cv.name+'">'+cv.name+'</td>'
-      +'<td class="r">'+cv.loads+'</td>'
-      +'<td class="r" style="color:#f87171;font-weight:600">'+fmt(cv.pay)+'</td>'
-      +'<td class="r" style="color:#93c5fd">'+(cv.miles>0?fmtN(cv.miles)+' mi':'—')+'</td>'
-      +'<td class="r" style="color:#e8a020">'+(cv.rpm?'$'+cv.rpm.toFixed(2)+'/mi':'—')+'</td>'
-      +'</tr>';
-  }
+  // ── Weekly summary ──
+  const weekMap = {};
+  loads.forEach(l => {
+    if (!l.pickDate) return;
+    const d = new Date(l.pickDate);
+    const sun = new Date(d); sun.setDate(d.getDate()-d.getDay()); sun.setHours(0,0,0,0);
+    const key = sun.toISOString().slice(0,10);
+    if (!weekMap[key]) weekMap[key] = {sun, loads:0, revenue:0, net:0, carrier_cost:0};
+    weekMap[key].loads++;
+    weekMap[key].revenue      += l.revenue;
+    weekMap[key].net          += l.net;
+    weekMap[key].carrier_cost += l.carrier_cost;
+  });
 
-  // Build weekly table
-  var wkRows=weekData.map(function(wk){
-    return '<tr>'
-      +'<td>'+wk.label+'</td>'
-      +'<td style="color:#fff;font-weight:600;text-align:right">'+fmt(wk.revenue)+'</td>'
-      +'<td style="color:#4ade80;font-weight:600;text-align:right">'+fmt(wk.net)+'</td>'
-      +'<td style="color:#e8a020;text-align:right">'+fmtPct(wk.gp)+'</td>'
-      +'<td style="color:#93c5fd;text-align:right">'+wk.loads+'</td>'
-      +'<td style="color:#93c5fd;text-align:right">'+(wk.miles>0?fmtN(wk.miles)+' mi':'—')+'</td>'
-      +'<td style="color:#e8a020;text-align:right">'+(wk.rpm?'$'+wk.rpm.toFixed(2)+'/mi':'—')+'</td>'
-      +'</tr>';
+  const weekRows = Object.keys(weekMap).sort().map(key => {
+    const wk = weekMap[key];
+    const sat = new Date(wk.sun); sat.setDate(wk.sun.getDate()+6);
+    const fD = d => (d.getMonth()+1)+'/'+(d.getDate());
+    const gp = wk.revenue > 0 ? r2(wk.net/wk.revenue*100) : 0;
+    const gpColor = gp>=30?'#4ade80':gp>=15?'#e8a020':'#f87171';
+    return `<tr>
+      <td style="color:#e8a020;font-weight:700">${fD(wk.sun)} – ${fD(sat)}</td>
+      <td class="r">${wk.loads}</td>
+      <td class="rev">$${fmt(r2(wk.revenue))}</td>
+      <td class="r" style="color:#f87171">-$${fmt(r2(wk.carrier_cost))}</td>
+      <td class="net" style="color:${wk.net>=0?'#4ade80':'#f87171'}">$${fmt(r2(wk.net))}</td>
+      <td class="gp" style="color:${gpColor}">${fmtPct(gp)}%</td>
+    </tr>`;
   }).join('');
-  var wkTotRPM=totMiles>0?r2(totRev/totMiles):null;
-  var wkTotRow='<tr class="total-row">'
-    +'<td>TOTAL / AVG</td>'
-    +'<td style="text-align:right">'+fmt(totRev)+'</td>'
-    +'<td style="text-align:right">'+fmt(totNet)+'</td>'
-    +'<td style="text-align:right">'+fmtPct(totGP)+'</td>'
-    +'<td style="text-align:right">'+totLoads+'</td>'
-    +'<td style="text-align:right">'+(totMiles>0?fmtN(totMiles)+' mi':'—')+'</td>'
-    +'<td style="text-align:right">'+(wkTotRPM?'$'+wkTotRPM.toFixed(2)+'/mi':'—')+'</td>'
-    +'</tr>';
 
-  var kpiHtml='<div class="kpibar" style="grid-template-columns:repeat(7,1fr)">'
-    +'<div class="kpi hl"><span class="kl">Gross Revenue</span><div class="kv">'+fmt(totRev)+'</div></div>'
-    +'<div class="kpi"><span class="kl">Carrier Costs</span><div class="kv" style="color:#f87171">'+fmt(totCC)+'</div></div>'
-    +'<div class="kpi hl3"><span class="kl">Net Revenue</span><div class="kv">'+fmt(totNet)+'</div></div>'
-    +'<div class="kpi hl2"><span class="kl">Avg GP %</span><div class="kv">'+fmtPct(totGP)+'</div></div>'
-    +'<div class="kpi"><span class="kl">Total Loads</span><div class="kv">'+totLoads+'</div></div>'
-    +'<div class="kpi"><span class="kl">Est. Miles</span><div class="kv">'+(totMiles>0?fmtN(totMiles):'—')+'</div></div>'
-    +'<div class="kpi"><span class="kl">Avg RPM</span><div class="kv">'+(avgRPM?'$'+avgRPM.toFixed(2):'—')+'</div></div>'
-    +'</div>';
+  // ── Render ──
+  document.getElementById('pageOut').innerHTML = `
+    <div class="rpt-header">
+      <div class="rpt-header-left">
+        <div class="rpt-brand">RT</div>
+        <div class="rpt-title">
+          <h1>Revolution Transport — Broker Summary</h1>
+          <p>Customer Operations Review &nbsp;·&nbsp; Confidential — Internal Use Only &nbsp;·&nbsp; Ryan Capps</p>
+        </div>
+      </div>
+      <div class="rpt-right">
+        <div class="period-label">Period</div>
+        <div style="font-weight:700;font-size:13px">${period}</div>
+        <span class="ctag">Confidential</span>
+      </div>
+    </div>
 
-  document.getElementById('pageOut').innerHTML=
-    '<div class="rpt-header"><div style="display:flex;align-items:center;gap:14px"><div class="rpt-brand">RT</div>'
-    +'<div class="rpt-title"><h1>Revolution Transport — Broker Summary</h1>'
-    +'<p>Shipment Summary Report · Confidential — Internal Use Only · Ryan Capps</p></div></div>'
-    +'<div style="display:flex;align-items:center;gap:10px"><span style="font-size:11px;color:var(--muted)">Period</span>'
-    +'<span style="font-weight:700;font-size:13px">'+period+'</span><span class="ctag">Confidential</span></div></div>'
-    +kpiHtml
-    +'<div class="section-title">■ Weekly Summary <span>'+weekData.length+' weeks</span></div>'
-    +'<table class="weekly-table"><thead><tr>'
-    +'<th style="text-align:left">Week</th><th>Revenue</th><th>Net Revenue</th><th>GP %</th><th>Loads</th><th>Est. Miles</th><th>RPM</th>'
-    +'</tr></thead><tbody>'+wkRows+'</tbody><tfoot>'+wkTotRow+'</tfoot></table>'
-    +'<div class="two-col">'
-    +'<div><div class="section-title">■ Customer Breakdown <span>'+custData.length+' customers</span></div>'+buildCustTable(custData)+'</div>'
-    +'<div><div class="section-title">■ Carrier Breakdown <span>top 20 by pay</span></div>'+buildCarrTable(carrData)+'</div>'
-    +'</div>'
-    +'<div class="footnote">Est. Miles = straight-line × 1.2 driving factor · '+milesCalcPct+'% of loads matched · RPM excludes '+rpmExcluded+' loads under '+minMiles+' mi · Canceled/Draft excluded</div>';
+    <div class="kpibar" style="grid-template-columns:repeat(6,1fr);margin-bottom:20px">
+      <div class="kpi hl"><span class="kl">Gross Revenue</span><div class="kv">$${fmt(totalRevenue)}</div></div>
+      <div class="kpi"><span class="kl">Carrier Costs</span><div class="kv" style="color:#f87171">$${fmt(totalCarrierCost)}</div></div>
+      <div class="kpi hl3"><span class="kl">Net Revenue</span><div class="kv">$${fmt(totalNet)}</div></div>
+      <div class="kpi hl2"><span class="kl">Avg Margin</span><div class="kv">${fmtPct(avgMargin)}%</div></div>
+      <div class="kpi"><span class="kl">Total Loads</span><div class="kv">${totalLoads}</div></div>
+      <div class="kpi"><span class="kl">Avg Rev / Load</span><div class="kv">$${fmt(avgRevPerLoad)}</div></div>
+    </div>
 
-  document.getElementById('tbarInfo').textContent=period+' · '+totLoads+' loads · '+fmt(totRev);
-  attachSort('custTable', custData, 'revenue', false, renderCustRow);
-  attachSort('carrTable', carrData, 'pay', false, renderCarrRow);
-  document.getElementById('setup').style.display='none';
-  document.getElementById('summary').style.display='block';
+    <div class="section-title">■ Customer Breakdown <span>${Object.keys(custMap).length} customers · ${totalLoads} total shipments</span></div>
+    <table class="data-table" id="custTable">
+      <thead><tr>
+        <th class="sortable" data-table="custTable" data-col="0" data-type="str">Customer ↕</th>
+        <th class="r sortable" data-table="custTable" data-col="1" data-type="num">Loads ↕</th>
+        <th class="r sortable" data-table="custTable" data-col="2" data-type="num">Revenue ↕</th>
+        <th class="r sortable" data-table="custTable" data-col="3" data-type="num">Carrier Cost ↕</th>
+        <th class="r sortable" data-table="custTable" data-col="4" data-type="num">Net Revenue ↕</th>
+        <th class="r sortable" data-table="custTable" data-col="5" data-type="num">GP % ↕</th>
+      </tr></thead>
+      <tbody>${custRows}</tbody>
+    </table>
+
+    <div class="section-title">■ Weekly Summary <span>Sun–Sat periods</span></div>
+    <table class="data-table" id="weekTable">
+      <thead><tr>
+        <th class="sortable" data-table="weekTable" data-col="0" data-type="str">Week ↕</th>
+        <th class="r sortable" data-table="weekTable" data-col="1" data-type="num">Loads ↕</th>
+        <th class="r sortable" data-table="weekTable" data-col="2" data-type="num">Revenue ↕</th>
+        <th class="r sortable" data-table="weekTable" data-col="3" data-type="num">Carrier Cost ↕</th>
+        <th class="r sortable" data-table="weekTable" data-col="4" data-type="num">Net Revenue ↕</th>
+        <th class="r sortable" data-table="weekTable" data-col="5" data-type="num">Margin % ↕</th>
+      </tr></thead>
+      <tbody>${weekRows}</tbody>
+    </table>
+  `;
+
+  document.getElementById('tbarInfo').textContent =
+    period + ' · ' + totalLoads + ' loads · $' + fmt(totalRevenue) + ' revenue';
+
+  document.getElementById('setup').style.display = 'none';
+  document.getElementById('summary').style.display = 'block';
+  setTimeout(initSortable, 50);
 }
 
-function showErr(msg){var el=document.getElementById('errMsg');el.style.display=msg?'block':'none';el.textContent=msg;}
 
-</script>
-<script>
+// ── Sortable tables ──
+const sortState = {};
 
-(function(){
-  var btn=document.getElementById('revNavBtn');
-  var ov=document.getElementById('revNavOverlay');
-  var sb=document.getElementById('revNavSidebar');
-  if(!btn||!ov||!sb)return;
-  function openNav(){sb.classList.add('open');ov.classList.add('open');}
-  function closeNav(){sb.classList.remove('open');ov.classList.remove('open');}
-  btn.onclick=function(){sb.classList.contains('open')?closeNav():openNav();};
-  ov.onclick=closeNav;
-})();
+function initSortable() {
+  document.querySelectorAll('th.sortable').forEach(th => {
+    th.style.cursor = 'pointer';
+    th.addEventListener('click', function() {
+      const tableId = this.dataset.table;
+      const col = parseInt(this.dataset.col);
+      const type = this.dataset.type;
+      sortTable(tableId, col, type);
+    });
+  });
+}
 
+function sortTable(tableId, col, type) {
+  const table = document.getElementById(tableId);
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const ths = table.querySelectorAll('th');
+
+  // Toggle direction
+  const key = tableId + '-' + col;
+  const asc = sortState[key] !== true;
+  sortState[key] = asc;
+
+  // Update header indicators
+  ths.forEach((th, i) => {
+    th.classList.remove('sort-asc', 'sort-desc');
+    if (i === col) th.classList.add(asc ? 'sort-asc' : 'sort-desc');
+  });
+
+  rows.sort((a, b) => {
+    const aText = a.cells[col]?.textContent.trim() || '';
+    const bText = b.cells[col]?.textContent.trim() || '';
+    if (type === 'num') {
+      const aNum = parseFloat(aText.replace(/[$,%]/g,'').replace(/,/g,'')) || 0;
+      const bNum = parseFloat(bText.replace(/[$,%]/g,'').replace(/,/g,'')) || 0;
+      return asc ? bNum - aNum : aNum - bNum;
+    }
+    return asc ? bText.localeCompare(aText) : aText.localeCompare(bText);
+  });
+
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+function goBack() {
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('setup').style.display = 'flex';
+}
+function showErr(msg) {
+  const el = document.getElementById('errMsg');
+  el.style.display = msg ? 'block' : 'none';
+  el.textContent = msg;
+}
 </script>
 </body>
 </html>
